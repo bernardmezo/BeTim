@@ -1,0 +1,151 @@
+// prisma/schema.prisma
+// Hybrid setup: SQLite for local dev, PostgreSQL for production
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = env("DATABASE_PROVIDER")
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id               Int              @id @default(autoincrement())
+  name             String
+  categoryMain     String
+  categorySub      String?
+  description      String?
+  openDate         DateTime?
+  phoneNumber      String?
+  website          String?
+  logoUrl          String?
+  coverPhotoUrl    String?
+  videoUrl         String?
+  posts            Json?
+  type             BusinessType
+  location         Location?
+  hours            BusinessHour[]
+  menus            Menu[]
+  services         Service[]
+  attributes       FoodAttribute?
+  comments         Comment[]
+  bookmarks        Bookmark[]
+  ratings          Rating[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model Location {
+  id           Int       @id @default(autoincrement())
+  businessId   Int       @unique
+  address      String?
+  city         String?
+  province     String?
+  postalCode   String?
+  latitude     Float?
+  longitude    Float?
+  serviceArea  String?
+  business     Business  @relation(fields: [businessId], references: [id])
+}
+
+model BusinessHour {
+  id          Int       @id @default(autoincrement())
+  businessId  Int
+  dayOfWeek   String
+  openTime    String?
+  closeTime   String?
+  specialNote String?
+  business    Business  @relation(fields: [businessId], references: [id])
+}
+
+model Menu {
+  id          Int        @id @default(autoincrement())
+  businessId  Int
+  name        String
+  menuUrl     String?
+  photoUrl    String?
+  items       MenuItem[]
+  business    Business   @relation(fields: [businessId], references: [id])
+}
+
+model MenuItem {
+  id          Int       @id @default(autoincrement())
+  menuId      Int
+  name        String
+  description String?
+  price       Float?
+  photoUrl    String?
+  menu        Menu      @relation(fields: [menuId], references: [id])
+}
+
+model FoodAttribute {
+  id                 Int       @id @default(autoincrement())
+  businessId         Int       @unique
+  dineIn             Boolean   @default(false)
+  takeaway           Boolean   @default(false)
+  delivery           Boolean   @default(false)
+  wifi               Boolean   @default(false)
+  parking            String?
+  ambience           String[]  @default([])
+  audience           String[]  @default([])
+  paymentMethods     String[]  @default([])
+  dietaryOptions     String[]  @default([])
+  business           Business  @relation(fields: [businessId], references: [id])
+}
+
+model Service {
+  id                 Int       @id @default(autoincrement())
+  businessId         Int
+  category           String
+  name               String
+  description        String?
+  priceType          PriceType
+  priceValue         Float?
+  requireAppointment Boolean   @default(false)
+  isLocalOwned       Boolean   @default(false)
+  isFemaleOwned      Boolean   @default(false)
+  isVeteranOwned     Boolean   @default(false)
+  business           Business  @relation(fields: [businessId], references: [id])
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  businessId  Int
+  name        String
+  content     String
+  createdAt   DateTime  @default(now())
+  business    Business  @relation(fields: [businessId], references: [id])
+}
+
+model Bookmark {
+  id          Int       @id @default(autoincrement())
+  businessId  Int
+  cookieId    String
+  createdAt   DateTime  @default(now())
+  business    Business  @relation(fields: [businessId], references: [id])
+}
+
+model Rating {
+  id          Int       @id @default(autoincrement())
+  businessId  Int
+  cookieId    String
+  score       Int       @default(5)
+  review      String?
+  createdAt   DateTime  @default(now())
+  business    Business  @relation(fields: [businessId], references: [id])
+}
+
+enum BusinessType {
+  FOOD
+  SERVICE
+  OTHER
+}
+
+enum PriceType {
+  FIXED
+  START_FROM
+  FREE
+  QUOTE
+}
