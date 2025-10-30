@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = env("DATABASE_PROVIDER")
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -44,10 +44,13 @@ model Location {
   city         String?
   province     String?
   postalCode   String?
-  latitude     Float?
-  longitude    Float?
+  latitude     Float?    // akan digunakan untuk gmaps marker
+  longitude    Float?    // akan digunakan untuk gmaps marker
+  googlePlaceId String?  // opsional, untuk integrasi GMaps API
   serviceArea  String?
   business     Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId])
 }
 
 model BusinessHour {
@@ -58,6 +61,8 @@ model BusinessHour {
   closeTime   String?
   specialNote String?
   business    Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId])
 }
 
 model Menu {
@@ -68,6 +73,8 @@ model Menu {
   photoUrl    String?
   items       MenuItem[]
   business    Business   @relation(fields: [businessId], references: [id])
+
+  @@index([businessId])
 }
 
 model MenuItem {
@@ -78,6 +85,8 @@ model MenuItem {
   price       Float?
   photoUrl    String?
   menu        Menu      @relation(fields: [menuId], references: [id])
+
+  @@index([menuId])
 }
 
 model FoodAttribute {
@@ -108,6 +117,8 @@ model Service {
   isFemaleOwned      Boolean   @default(false)
   isVeteranOwned     Boolean   @default(false)
   business           Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId])
 }
 
 model Comment {
@@ -117,6 +128,8 @@ model Comment {
   content     String
   createdAt   DateTime  @default(now())
   business    Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId])
 }
 
 model Bookmark {
@@ -125,6 +138,8 @@ model Bookmark {
   cookieId    String
   createdAt   DateTime  @default(now())
   business    Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId, cookieId])
 }
 
 model Rating {
@@ -135,6 +150,8 @@ model Rating {
   review      String?
   createdAt   DateTime  @default(now())
   business    Business  @relation(fields: [businessId], references: [id])
+
+  @@index([businessId, cookieId])
 }
 
 enum BusinessType {
