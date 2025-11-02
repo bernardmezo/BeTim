@@ -1,14 +1,17 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/layout/Navbar'; // <-- PATH BARU
-import Footer from '@/components/layout/footer'; // <-- PATH BARU
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/footer';
 
-// Konfigurasi font
-const inter = Inter({ 
+// 1. GANTI import 'geist' DENGAN 'next/font/google'
+import { Poppins } from 'next/font/google';
+
+// 2. KONFIGURASI POPPINS
+const poppins = Poppins({
   subsets: ['latin'],
-  variable: '--font-sans', // Kita akan gunakan ini di CSS
+  weight: ['400', '500', '600', '700'], // Pilih 'weight' yang Anda butuhkan
+  variable: '--font-sans',            // Ini adalah "jembatan" kita
 });
 
 export const metadata: Metadata = {
@@ -22,17 +25,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className={`${inter.variable} bg-white`}>
-        
-        <Navbar /> {/* Navbar akan muncul di SEMUA halaman */}
-        
-        <main>
-          {children} {/* Ini adalah tempat page.tsx akan dirender */}
-        </main>
-        
-        <Footer /> {/* Footer akan muncul di SEMUA halaman */}
-
+    // 3. TERAPKAN VARIABEL FONT KE <html>
+    // Kita tidak perlu .className di sini, hanya .variable
+    <html lang="id" className={poppins.variable}>
+      <body className="bg-white">
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

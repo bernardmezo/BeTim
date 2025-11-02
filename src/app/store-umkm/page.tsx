@@ -1,4 +1,4 @@
-import StoreSection from "@/components/sections/home/StoreSection";
+import StoreSection from "@/components/sections/store/StoreSection";
 
 const CategoriesPage = () => {
   return (
