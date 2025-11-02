@@ -6,6 +6,8 @@ import React, { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
 import { Search, MapPin, Star, Clock, Phone, Heart, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { address } from "framer-motion/client";
 
 const stores = [
   {
@@ -25,7 +27,7 @@ const stores = [
     name: "Satria Steam Motor & Helmet",
     rating: 4.8,
     reviews: 89,
-    img: "/img-src/store2.jpg",
+    img: "/img-src/steam1.png",
     desc: "Restoran mie & bakmi dengan variasi topping seperti ayam kecap, bakso, pangsit.",
     address: "123 Main Street, Downtown",
     category: "Coffee & Tea",
@@ -37,7 +39,7 @@ const stores = [
     name: "Warung Ibu Rum",
     rating: 4.8,
     reviews: 156,
-    img: "/img-src/store3.jpg",
+    img: "/img-src/nasiuduk3.png",
     desc: "Sebuah Usaha Mikro penjagadis (warung tenda/kaki lima) di Beji Timur yang spesialis menyajikan...",
     address: "123 Main Street, Downtown",
     category: "Drinks",
@@ -49,7 +51,7 @@ const stores = [
     name: "Pondor Steak & Stake",
     rating: 4.9,
     reviews: 203,
-    img: "/img-src/store2.jpg",
+    img: "/img-src/steak1.png",
     desc: "Steak house dengan cita rasa western dan harga terjangkau.",
     address: "123 Main Street, Downtown",
     category: "Heavy Food",
@@ -58,10 +60,10 @@ const stores = [
   },
   {
     id: 5,
-    name: "Apotek Jaya",
+    name: "Warung si Nopal",
     rating: 4.7,
     reviews: 67,
-    img: "/img-src/store3.jpg",
+    img: "/img-src/toko-nopal1.png",
     desc: "Apotek lengkap dengan obat-obatan dan konsultasi gratis.",
     address: "123 Main Street, Downtown",
     category: "Kebutuhan Sehari-hari",
@@ -70,16 +72,90 @@ const stores = [
   },
   {
     id: 6,
-    name: "Es Kuwwed Ice Shop",
+    name: "Es Kuwut",
     rating: 4.8,
     reviews: 178,
-    img: "/img-src/bakso-gp1.png",
+    img: "/img-src/kuwut1.png",
     desc: "Es serut dengan berbagai varian rasa dan topping.",
     address: "123 Main Street, Downtown",
     category: "Drinks",
     hours: "13:00 - 21:00",
     featured: false,
   },
+  {
+    id: 7,
+    name: "Bakmi88 Beji",
+    rating: 4.6,
+    reviews:  94,
+    img: "/img-src/bakmi88-2.png",
+    desc: "Restoran mie & bakmi dengan variasi topping seperti ayam kecap, bakso, pangsit.",
+    address: "Jl. Ridwan Rais, Beji Timur, Kecamatan Beji, Kota Depok, Jawa Barat ",
+    category: "Heavy Food",
+    hours: "10:00 - 21:00",
+    featured: false,
+  },
+  {
+    id: 8,
+    name: "Kost Pondok Ismata Putri",
+    rating: 4.6,
+    reviews:  45,
+    img: "/img-src/kos1.jpg",
+    desc: "Sebuah usaha UMKM di bidang jasa akomodasi (indekos) yang menyediakan kamar kost khusus untuk Putri (wanita) di area Beji, Depok",
+    address: "Beji, Kota Depok, Jawa Barat (Dekat dengan Politeknik Negeri Jakarta/PNJ dan RS Universitas Indonesia)",
+    category: "Service",
+    hours: "24 Hours",
+    featured: false,
+  }, 
+  {
+    id: 9,
+    name: "Tempe Mendoan Dan Pecel Sayur",
+    rating: 4.6,
+    reviews:  78,
+    img: "/img-src/mendoan1.png",
+    desc: "Usaha kuliner (UMKM) yang menjual aneka jajanan dan makanan tradisional Indonesia, khususnya pecel sayur, aneka gorengan (seperti tempe mendoan, bakwan), dan bubur",
+    address: "Jalan Ridwan Rais Rt 01/02 Beji Timur, Depok, Jawa Barat",
+    category: "Heavy Food",
+    hours: "07:00 - 21:00",
+    featured: false,
+  },
+  {
+    id: 10,
+    name: "Mosstly Coffee",
+    rating: 4.8,
+    reviews:  112,
+    img: "/img-src/mostly1.png",
+    desc: "Sebuah UMKM (Usaha Kecil/Menengah) berupa kafe modern, coffee shop, dan eatery yang populer di Beji. Dikenal sebagai hidden gem dengan suasana yang adem (banyak area terbuka/semi-outdoor) dan cocok untuk WFC (Work From Cafe).",
+    address: "Lokasi 1: Jl. Taufiqurrahman No.57A, Beji Timur, Kec. Beji, Kota Depok.",
+    category: "Coffee & Tea",
+    hours: "09:00 - 22:00",
+    featured: true,
+  }, 
+  {
+    id: 11,
+    name: "Palas Kopi",
+    rating: 4.6,
+    reviews:  112,
+    img: "/img-src/palaskopi2.png",
+    desc: "Sebuah UMKM (Usaha Kecil/Menengah) berupa coffee shop modern yang berlokasi di Beji Timur. Dikenal sebagai tempat nongkrong yang nyaman dengan area outdoor yang asri, menyajikan berbagai minuman kopi dan makanan ringan pendamping",
+    address: "Jl. Pala No.2, Beji Tim., Kecamatan Beji, Kota Depok, Jawa Barat 16422.",
+    category: "Coffee & Tea",
+    hours: "11:00 - 22:00",
+    featured: true,
+  },
+  {
+    id: 12,
+    name: "Seblak Kabita Beji (atau Warkop Pancong dan Seblak Kabita)",
+    rating: 5.0,
+    reviews:  112,
+    img: "/img-src/pancong1.png",
+    desc: "Sebuah usaha kuliner (UMKM) yang sangat populer di kalangan mahasiswa/pelajar di Beji. Usaha ini dikenal sebagai warkop/kedai yang spesialis menjual jajanan kekinian, terutama Seblak dengan berbagai level kepedasan dan Kue Pancong lumer",
+    address: "Jl. Kedasian, Beji Tim., Kecamatan Beji, Kota Depok, Jawa Barat 16422",
+    category: "Coffee & Tea",
+    hours: "11:00 - 22:00",
+    featured: true,
+  },
+  
+  
 ];
 
 // Category styles using Tailwind
@@ -241,18 +317,19 @@ function StoreCard({ store, index }: { store: typeof stores[0], index: number })
 
           {/* Action Buttons */}
           <div className="flex gap-3">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex-1 relative overflow-hidden rounded-xl group"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-[#129991] to-[#15b8ad]" />
-              <span className="absolute inset-0 bg-gradient-to-r from-[#15b8ad] to-[#18c7bb] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative z-10 block py-3 text-white font-semibold text-sm">
-                View Store
-              </span>
-            </motion.button>
-            
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex-1">
+              <Link
+                href="/detail-umkm"
+                className="relative overflow-hidden block rounded-xl group"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-[#129991] to-[#15b8ad]" />
+                <span className="absolute inset-0 bg-gradient-to-r from-[#15b8ad] to-[#18c7bb] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="relative z-10 block py-3 text-white font-semibold text-sm text-center">
+                  View Store
+                </span>
+              </Link>
+            </motion.div>
+
             <motion.button
               whileHover={{ scale: 1.1, rotate: 10 }}
               whileTap={{ scale: 0.9 }}

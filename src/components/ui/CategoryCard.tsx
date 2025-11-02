@@ -33,7 +33,7 @@ const itemVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0 },
 };
-
+  
 export default function CategoryCard({ category }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
   const Icon = category.icon;
