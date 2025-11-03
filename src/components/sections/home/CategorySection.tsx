@@ -74,12 +74,12 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
     >
       <motion.div
         style={{ rotateX }}
-        className={`${styles.cardInner} bg-gradient-to-br ${category.bgGradient} transform-gpu`}
+  className={`${styles.cardInner} bg-linear-to-br ${category.bgGradient} transform-gpu`}
       >
         <div className={styles.glassmorphism}></div>
         
         <div className={`${styles.animatedBackground} animate-pulse-slow`}>
-          <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient}`}></div>
+          <div className={`absolute inset-0 bg-linear-to-br ${category.gradient}`}></div>
         </div>
 
         <div className="relative p-8">
@@ -87,13 +87,13 @@ function CategoryCard({ category, index }: { category: typeof categories[0], ind
             
             <motion.div
               style={{ rotate: iconRotate, scale: iconScale }}
-              className={`${styles.iconContainer} bg-gradient-to-br ${category.gradient} transform-gpu`}
+              className={`${styles.iconContainer} bg-linear-to-br ${category.gradient} transform-gpu`}
             >
               <Icon className="w-12 h-12 text-white" strokeWidth={2.5} />
             </motion.div>
 
             <div className="flex-1">
-              <h3 className={`text-3xl font-bold mb-4 bg-gradient-to-r ${category.gradient} bg-clip-text text-transparent`}>
+              <h3 className={`text-3xl font-bold mb-4 bg-linear-to-r ${category.gradient} bg-clip-text text-transparent`}>
                 {category.name}
               </h3>
               
@@ -139,7 +139,7 @@ export default function CategorySection() {
   return (
     <section 
       ref={sectionRef}
-      className="py-32 bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden"
+    className="py-32 bg-linear-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden"
     >
       <motion.div 
         style={{ y: backgroundY }}
@@ -162,7 +162,7 @@ export default function CategorySection() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             <span className="text-gray-900">Semua Kebutuhan Anda,</span>
             <br />
-            <span className="bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] bg-clip-text text-transparent">
               Semua dari Lokal.
             </span>
           </h2>

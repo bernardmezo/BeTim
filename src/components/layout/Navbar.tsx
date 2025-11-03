@@ -221,7 +221,7 @@ export default function Navbar() {
                       block px-4 py-3 rounded-lg
                       transition-all duration-200
                       ${isCurrentPage 
-                        ? 'bg-gradient-to-r from-[#129991]/10 to-[#15b8ad]/10 text-[#129991] font-semibold' 
+                        ? 'bg-linear-to-r from-[#129991]/10 to-[#15b8ad]/10 text-[#129991] font-semibold'
                         : 'text-gray-700 hover:bg-gray-100'
                       }
                     `}
