@@ -2,13 +2,16 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Phone, MapPin, Clock, Star, ArrowLeft, ExternalLink } from "lucide-react";
 import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-} from "framer-motion";
+  Phone,
+  MapPin,
+  Clock,
+  Star,
+  ArrowLeft,
+  ExternalLink,
+  Plus,
+} from "lucide-react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -34,30 +37,39 @@ const reviews = [
   {
     name: "Lukman Hakim",
     rating: 5,
-    comment: "Amazing quality products and excellent customer service. The staff is very knowledgeable and helpful.",
-    date: "2024-05-21"
+    comment:
+      "Amazing quality products and excellent customer service. The staff is very knowledgeable and helpful.",
+    date: "2024-05-21",
   },
   {
     name: "Siti Nurhaliza",
     rating: 4,
-    comment: "Great service and very clean results. My motorcycle looks brand new!",
-    date: "2024-05-18"
+    comment:
+      "Great service and very clean results. My motorcycle looks brand new!",
+    date: "2024-05-18",
   },
   {
     name: "Ahmad Rizki",
     rating: 5,
-    comment: "Fast service, friendly staff, and affordable prices. Highly recommended!",
-    date: "2024-05-15"
+    comment:
+      "Fast service, friendly staff, and affordable prices. Highly recommended!",
+    date: "2024-05-15",
   },
 ];
 
 // Product Card Component dengan animasi
-function ProductCard({ item, index }: { item: typeof products[0], index: number }) {
+function ProductCard({
+  item,
+  index,
+}: {
+  item: (typeof products)[0];
+  index: number;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: cardRef,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
@@ -65,9 +77,17 @@ function ProductCard({ item, index }: { item: typeof products[0], index: number 
     damping: 30,
   });
 
-  const opacity = useTransform(smoothProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.5]);
+  const opacity = useTransform(
+    smoothProgress,
+    [0, 0.3, 0.7, 1],
+    [0, 1, 1, 0.5]
+  );
   const y = useTransform(smoothProgress, [0, 0.3], [50, 0]);
-  const rotateX = useTransform(smoothProgress, [0, 0.3, 0.5, 0.7, 1], [15, 5, 0, -5, -10]);
+  const rotateX = useTransform(
+    smoothProgress,
+    [0, 0.3, 0.5, 0.7, 1],
+    [15, 5, 0, -5, -10]
+  );
 
   return (
     <motion.div
@@ -104,7 +124,13 @@ function ProductCard({ item, index }: { item: typeof products[0], index: number 
 }
 
 // Review Card Component
-function ReviewCard({ review, index }: { review: typeof reviews[0], index: number }) {
+function ReviewCard({
+  review,
+  index,
+}: {
+  review: (typeof reviews)[0];
+  index: number;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
@@ -117,8 +143,10 @@ function ReviewCard({ review, index }: { review: typeof reviews[0], index: numbe
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#129991] to-[#15b8ad] 
-                          flex items-center justify-center text-white text-xl font-bold">
+          <div
+            className="w-12 h-12 rounded-full bg-gradient-to-br from-[#129991] to-[#15b8ad] 
+                          flex items-center justify-center text-white text-xl font-bold"
+          >
             {review.name.charAt(0)}
           </div>
           <div>
@@ -127,7 +155,11 @@ function ReviewCard({ review, index }: { review: typeof reviews[0], index: numbe
               {[...Array(5)].map((_, j) => (
                 <Star
                   key={j}
-                  className={`w-4 h-4 ${j < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
+                  className={`w-4 h-4 ${
+                    j < review.rating
+                      ? "text-yellow-400 fill-yellow-400"
+                      : "text-gray-300"
+                  }`}
                 />
               ))}
             </div>
@@ -147,7 +179,7 @@ export default function DetailStore() {
 
   const { scrollYProgress } = useScroll({
     target: headerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const headerY = useTransform(scrollYProgress, [0, 1], [0, -50]);
@@ -155,7 +187,6 @@ export default function DetailStore() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
-      
       {/* Back Button - Desktop: Top Left, Mobile: Below Navbar */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -179,7 +210,7 @@ export default function DetailStore() {
           <ArrowLeft className="w-6 h-6" />
         </motion.button>
       </motion.div>
-      
+
       {/* Mobile Back Button - Below Navbar, Top Left */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
@@ -204,14 +235,14 @@ export default function DetailStore() {
       </motion.div>
 
       {/* Header Store Info */}
-      <motion.section 
+      <motion.section
         ref={headerRef}
         style={{ y: headerY, opacity: headerOpacity }}
         className="container mx-auto px-6 md:pt-32 pb-12"
       >
         <div className="md:flex gap-10 items-start">
           {/* Image Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
@@ -226,7 +257,7 @@ export default function DetailStore() {
                 className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
+
               {/* Rating Badge */}
               <motion.div
                 initial={{ scale: 0 }}
@@ -242,13 +273,13 @@ export default function DetailStore() {
           </motion.div>
 
           {/* Info Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="md:w-1/2 mt-6 md:mt-0"
           >
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -257,8 +288,8 @@ export default function DetailStore() {
             >
               Satria Steam Motor & Helmet
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -268,7 +299,7 @@ export default function DetailStore() {
               hasil bersih maksimal.
             </motion.p>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -276,7 +307,10 @@ export default function DetailStore() {
             >
               <div className="flex items-start gap-3 group">
                 <MapPin className="w-5 h-5 text-[#129991] shrink-0 group-hover:scale-110 transition-transform" />
-                <p>Jl. Rachmat No. 543, Kelurahan Beji Timur, Kecamatan Beji, Kota Depok, Jawa Barat 16422</p>
+                <p>
+                  Jl. Rachmat No. 543, Kelurahan Beji Timur, Kecamatan Beji,
+                  Kota Depok, Jawa Barat 16422
+                </p>
               </div>
               <div className="flex items-start gap-3 group">
                 <Phone className="w-5 h-5 text-[#129991] group-hover:scale-110 transition-transform" />
@@ -288,14 +322,17 @@ export default function DetailStore() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               className="flex gap-4 mt-8"
             >
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px -10px rgba(18, 153, 145, 0.4)" }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px -10px rgba(18, 153, 145, 0.4)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 className="flex-1 flex items-center justify-center gap-2 
                            bg-gradient-to-r from-[#129991] to-[#15b8ad]
@@ -305,7 +342,7 @@ export default function DetailStore() {
                 <MapPin className="w-5 h-5" />
                 Get Destination
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 10 }}
                 whileTap={{ scale: 0.9, rotate: -10 }}
@@ -324,7 +361,7 @@ export default function DetailStore() {
 
       {/* Tabs Section */}
       <section className="container mx-auto px-6 mt-16">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -339,14 +376,15 @@ export default function DetailStore() {
               className={`
                 pb-4 font-bold text-lg relative whitespace-nowrap
                 transition-all duration-300
-                ${activeTab === tab
-                  ? "text-[#129991]"
-                  : "text-gray-600 hover:text-[#129991]"
+                ${
+                  activeTab === tab
+                    ? "text-[#129991]"
+                    : "text-gray-600 hover:text-[#129991]"
                 }
               `}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              
+
               {activeTab === tab && (
                 <motion.div
                   layoutId="activeTab"
@@ -396,7 +434,7 @@ export default function DetailStore() {
             <h4 className="font-bold text-xl text-gray-800 mb-6">
               Store Information
             </h4>
-            
+
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
@@ -412,16 +450,17 @@ export default function DetailStore() {
                         0878-8012-5151 / 0857-1588-0556
                       </p>
                     </>
-                  )
+                  ),
                 },
                 {
                   title: "Operating Hours",
                   content: (
                     <p className="text-gray-600">
-                      10.00 – 21.00 WIB<br/>
+                      10.00 – 21.00 WIB
+                      <br />
                       (10 Pagi – 9 Malam)
                     </p>
-                  )
+                  ),
                 },
                 {
                   title: "Price Range",
@@ -429,20 +468,25 @@ export default function DetailStore() {
                     <p className="text-[#129991] font-bold text-xl">
                       Rp 15.000 – Rp 25.000
                     </p>
-                  )
-                }
+                  ),
+                },
               ].map((info, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(18, 153, 145, 0.3)" }}
+                  whileHover={{
+                    y: -5,
+                    boxShadow: "0 10px 30px -10px rgba(18, 153, 145, 0.3)",
+                  }}
                   className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl 
                              border-2 border-gray-200 hover:border-[#129991] 
                              transition-all duration-300"
                 >
-                  <h5 className="font-bold text-lg text-gray-800 mb-4">{info.title}</h5>
+                  <h5 className="font-bold text-lg text-gray-800 mb-4">
+                    {info.title}
+                  </h5>
                   {info.content}
                 </motion.div>
               ))}
@@ -457,18 +501,37 @@ export default function DetailStore() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-3xl font-bold text-gray-800 mb-8">
-              Customer Reviews
-            </h3>
-            
-            <motion.div 
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-3xl font-bold text-gray-800">
+                Customer Reviews
+              </h3>
+
+              <Link href="/coment-umkm">
+                <motion.div
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px -10px rgba(18, 153, 145, 0.4)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center justify-center gap-2 
+                              bg-gradient-to-r from-[#129991] to-[#15b8ad]
+                              text-white font-semibold py-3 px-6 rounded-2xl 
+                              transition-all duration-300 shadow-lg"
+                >
+                  <Plus className="w-5 h-5" strokeWidth={3} />
+                  Add Review
+                </motion.div>
+              </Link>
+            </div>
+
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               className="bg-gradient-to-br from-[#129991]/10 to-[#15b8ad]/10 
                          p-8 rounded-3xl text-center mb-10 border-2 border-[#129991]/20"
             >
-              <motion.p 
+              <motion.p
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 200 }}
@@ -514,7 +577,7 @@ export default function DetailStore() {
             whileHover={{ scale: 1.02 }}
             className="relative rounded-3xl overflow-hidden shadow-2xl group"
           >
-            <Link 
+            <Link
               href="https://www.google.com/maps/place/Satria+Steam+Motor+%26+Helmet/@-6.3814382,106.8207898,16.95z"
               target="_blank"
             >
@@ -542,7 +605,9 @@ export default function DetailStore() {
             </h3>
             <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-2 border-gray-200">
               <p className="text-gray-700 mb-4 leading-relaxed">
-                <strong className="text-[#129991] text-xl">UMKM Betim Store & Gallery</strong>
+                <strong className="text-[#129991] text-xl">
+                  UMKM Betim Store & Gallery
+                </strong>
                 <br />
                 Jl. Cendana No. 946, Bandung, Jawa Barat 40191
                 <br />
@@ -551,7 +616,9 @@ export default function DetailStore() {
             </div>
 
             <div className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-200">
-              <h4 className="font-bold text-gray-800 mb-4 text-xl">Operational Hours</h4>
+              <h4 className="font-bold text-gray-800 mb-4 text-xl">
+                Operational Hours
+              </h4>
               <p className="text-gray-600 mb-6 leading-relaxed">
                 Senin – Sabtu: 08.00 – 18.00 WIB
                 <br />

@@ -1,22 +1,22 @@
 // src/components/ui/CategoryCard.tsx
 "use client";
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
+import { useRef } from "react";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
 
 // Tipe data yang kita harapkan
 type Category = {
   name: string;
   description: string;
   subCategories: string[];
-  icon: React.ComponentType<{ className?: string, strokeWidth?: number }>;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
   gradient: string;
   bgGradient: string;
-}
+};
 
 type Props = {
   category: Category;
-}
+};
 
 // "Bumbu" ringan untuk subkategori (animasi satu kali)
 const listVariants: Variants = {
@@ -33,15 +33,15 @@ const itemVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0 },
 };
-  
+
 export default function CategoryCard({ category }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
   const Icon = category.icon;
-  
+
   // 1. KITA HANYA BUTUH 2 'useScroll' (BUKAN 10)
   const { scrollYProgress } = useScroll({
     target: cardRef,
-    offset: ["start end", "end 0.3"] // Animasi masuk akan selesai saat 30% di layar
+    offset: ["start end", "end 0.3"], // Animasi masuk akan selesai saat 30% di layar
   });
 
   // Animasi "Masuk" yang JAUH LEBIH SEDERHANA
@@ -51,8 +51,8 @@ export default function CategoryCard({ category }: Props) {
   return (
     <motion.div
       ref={cardRef}
-      style={{ 
-        opacity, 
+      style={{
+        opacity,
         scale,
       }}
       className="sticky top-24 mb-16" // Jaga 'sticky'
@@ -67,15 +67,14 @@ export default function CategoryCard({ category }: Props) {
       >
         {/* Glassmorphism overlay (Tetap) */}
         <div className="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
-        
+
         {/* Content (Relative) */}
         <div className="relative p-8 md:p-12">
           <div className="flex flex-col md:flex-row gap-8 items-start">
-            
             {/* Ikon (Animasi Disederhanakan) */}
             <motion.div
-              style={{ 
-                scale: useTransform(scrollYProgress, [0, 0.5], [0.5, 1]) // Sedikit scale-in
+              style={{
+                scale: useTransform(scrollYProgress, [0, 0.5], [0.5, 1]), // Sedikit scale-in
               }}
               className={`
                 shrink-0 w-24 h-24 rounded-2xl
@@ -88,7 +87,7 @@ export default function CategoryCard({ category }: Props) {
 
             {/* Text Content (TANPA Animasi 'x') */}
             <div className="flex-1">
-              <h3 
+              <h3
                 className={`
                   text-4xl md:text-5xl font-bold mb-4
                   bg-gradient-to-r ${category.gradient}
@@ -97,14 +96,14 @@ export default function CategoryCard({ category }: Props) {
               >
                 {category.name}
               </h3>
-              
+
               <p className="text-gray-700 text-lg md:text-xl mb-8 leading-relaxed">
                 {category.description}
               </p>
-              
+
               {/* 2. "BUMBU" BARU (JAUH LEBIH RINGAN) */}
               {/* Animasi 'stagger' satu kali, bukan 'useTransform' di tiap item */}
-              <motion.div 
+              <motion.div
                 className="flex flex-wrap gap-3"
                 initial="hidden"
                 whileInView="visible" // "Mata-mata" internal
@@ -112,7 +111,7 @@ export default function CategoryCard({ category }: Props) {
                 variants={listVariants} // Varian untuk container (stagger)
               >
                 {category.subCategories.map((sub) => (
-                  <motion.span 
+                  <motion.span
                     key={sub}
                     variants={itemVariants} // Varian untuk item (fade-in)
                     className={`
