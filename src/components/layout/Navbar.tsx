@@ -7,11 +7,9 @@ import { usePathname } from 'next/navigation';
 import styles from '../styles/Navbar.module.css';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/categories', label: 'Categories' },
-  { href: '/store-umkm', label: 'Store' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/', label: 'Beranda' },
+  { href: '/store-umkm', label: 'Toko' },
+  { href: '/about-betim', label: 'Tentang' },
 ];
 
 export default function Navbar() {

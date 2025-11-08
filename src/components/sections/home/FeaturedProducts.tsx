@@ -165,11 +165,11 @@ export default function FeaturedProducts() {
         <AnimatedWrapper>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-gray-900">Featured </span>
-              <span className="text-teal-600">Products</span>
+              <span className="text-gray-900">Produk </span>
+              <span className="text-teal-600">Unggulan</span>
             </h2>
             <p className="text-gray-600 text-lg md:text-xl">
-              Discover what everyone’s loving lately
+              Temukan produk lokal terbaik pilihan
             </p>
           </div>
         </AnimatedWrapper>

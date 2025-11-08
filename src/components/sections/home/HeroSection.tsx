@@ -75,11 +75,11 @@ export default function HeroSection() {
         </div>
         
         <h1 className="text-5xl font-bold mb-4">
-          Discover Local Stores in Your Area
+          Temukan Toko Lokal Terbaik di Sekitarmu
         </h1>
         <p className="text-lg mb-8">
-          Support your community by shopping from trusted local businesses. 
-          Find unique products, amazing deals, and personalized service.
+          Dukung komunitas Anda dengan berbelanja dari bisnis lokal tepercaya. Temukan produk unik, penawaran luar biasa, 
+          dan layanan yang dipersonalisasi
         </p>
 
         {/* 7. Search Bar Cerdas (warna 'primary' Anda sudah terpakai) */}
