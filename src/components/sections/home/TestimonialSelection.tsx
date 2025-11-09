@@ -1,9 +1,9 @@
 // src/components/sections/home/TestimonialsSection.tsx
 "use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from "react";
+import Image from "next/image";
+import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import AnimatedWrapper from "@/components/ui/AnimatedWrapper";
 
 const testimonials = [
@@ -14,7 +14,7 @@ const testimonials = [
     avatar: "/img-src/avatar-1.jpg",
     rating: 5,
     text: "Sejak bergabung dengan platform ini, penjualan saya meningkat 300%! Sekarang banyak pelanggan baru yang menemukan warung saya. Terima kasih!",
-    store: "Warung Nasi Ibu Siti"
+    store: "Warung Nasi Ibu Siti",
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const testimonials = [
     avatar: "/img-src/avatar-2.jpg",
     rating: 5,
     text: "Platform yang sangat membantu UMKM seperti saya. Interface-nya mudah digunakan dan customer support-nya responsif. Highly recommended!",
-    store: "Kopi Joko Mantap"
+    store: "Kopi Joko Mantap",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const testimonials = [
     avatar: "/img-src/avatar-3.jpg",
     rating: 5,
     text: "Orderan online jadi lebih teratur dan efisien. Saya bisa fokus ke produksi, sementara sistem menghandle pesanan. Luar biasa!",
-    store: "Dian's Bakery"
+    store: "Dian's Bakery",
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ const testimonials = [
     avatar: "/img-src/avatar-4.jpg",
     rating: 5,
     text: "Dulu sayuran saya sering nggak laku. Sekarang dengan sistem pre-order, semua terencana dan fresh sampai ke customer. Mantap!",
-    store: "Sayur Fresh Ahmad"
+    store: "Sayur Fresh Ahmad",
   },
 ];
 
@@ -53,28 +53,31 @@ export default function TestimonialsSection() {
   };
 
   const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setActiveIndex(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+    );
   };
 
   const currentTestimonial = testimonials[activeIndex];
 
   return (
     <section className="py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div
+          className="absolute bottom-20 right-10 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        
         {/* Header */}
         <AnimatedWrapper>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-gray-900">What Our </span>
-              <span className="text-teal-600">Partners Say</span>
+              <span className="text-gray-900">Apa kata </span>
+              <span className="text-teal-600">Mitra kami</span>
             </h2>
             <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
               Cerita sukses dari UMKM yang telah bergabung dengan platform kami
@@ -86,7 +89,6 @@ export default function TestimonialsSection() {
         <AnimatedWrapper delay={0.2}>
           <div className="max-w-4xl mx-auto mb-12">
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-              
               {/* Quote Icon */}
               <div className="bg-gradient-to-r from-teal-500 to-teal-600 p-8 relative">
                 <Quote className="w-16 h-16 text-white/30 absolute top-4 left-4" />
@@ -98,11 +100,18 @@ export default function TestimonialsSection() {
                       </div>
                     </div>
                     <div className="text-white">
-                      <h3 className="text-2xl font-bold mb-1">{currentTestimonial.name}</h3>
-                      <p className="text-teal-100 mb-2">{currentTestimonial.role}</p>
+                      <h3 className="text-2xl font-bold mb-1">
+                        {currentTestimonial.name}
+                      </h3>
+                      <p className="text-teal-100 mb-2">
+                        {currentTestimonial.role}
+                      </p>
                       <div className="flex gap-1">
                         {[...Array(currentTestimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 fill-yellow-300 text-yellow-300" />
+                          <Star
+                            key={i}
+                            className="w-5 h-5 fill-yellow-300 text-yellow-300"
+                          />
                         ))}
                       </div>
                     </div>
@@ -150,8 +159,8 @@ export default function TestimonialsSection() {
                 onClick={() => setActiveIndex(index)}
                 className={`h-3 rounded-full transition-all duration-300 ${
                   index === activeIndex
-                    ? 'w-12 bg-teal-500'
-                    : 'w-3 bg-gray-300 hover:bg-gray-400'
+                    ? "w-12 bg-teal-500"
+                    : "w-3 bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
               />
@@ -163,10 +172,10 @@ export default function TestimonialsSection() {
         <AnimatedWrapper delay={0.4}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-4xl mx-auto">
             {[
-              { number: "500+", label: "UMKM Partners" },
-              { number: "10K+", label: "Happy Customers" },
-              { number: "4.9", label: "Average Rating" },
-              { number: "99%", label: "Satisfaction Rate" },
+              { number: "10+", label: "Mitra UMKM" },
+              { number: "50+", label: "Pelanggan yang Bahagia" },
+              { number: "4.9", label: "Rata-rata Rating" },
+              { number: "98%", label: "Tingkat Kepuasan" },
             ].map((stat, index) => (
               <div
                 key={index}
@@ -182,15 +191,21 @@ export default function TestimonialsSection() {
             ))}
           </div>
         </AnimatedWrapper>
-
       </div>
 
       <style jsx>{`
         @keyframes pulse {
-          0%, 100% { opacity: 0.1; transform: scale(1); }
-          50% { opacity: 0.15; transform: scale(1.05); }
+          0%,
+          100% {
+            opacity: 0.1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.15;
+            transform: scale(1.05);
+          }
         }
-        
+
         .animate-pulse {
           animation: pulse 4s ease-in-out infinite;
         }
