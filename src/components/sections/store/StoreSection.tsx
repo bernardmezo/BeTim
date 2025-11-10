@@ -201,7 +201,11 @@ function StoreCard({
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1, type: "spring" }}
-      whileHover={{ scale: 1.03, y: -8 }}
+      whileHover={{
+        scale: 1.03,
+        y: -8,
+        transition: { type: "spring", stiffness: 600, damping: 22 }
+      }}
       className="relative h-full bg-white rounded-2xl shadow-lg hover:shadow-[0_20px_50px_rgba(18,153,145,0.3)] overflow-hidden border border-gray-100 transition-all duration-200 ease-out"
     >
       {/* Store Image Container */}
@@ -365,7 +369,7 @@ const StoreSection = () => {
   return (
     <section
       key={pathname}
-      className="py-20 mt-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden"
+      className="py-20 -mt-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden"
     >
       {/* Animated Background Blobs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#129991]/8 rounded-full blur-[3rem] animate-blob" />
@@ -373,9 +377,8 @@ const StoreSection = () => {
       <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#18c7bb]/8 rounded-full blur-[3rem] animate-blob animation-delay-4000" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-gray-900">Daftar </span>
             <span className="bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] bg-clip-text text-transparent">
@@ -435,7 +438,7 @@ const StoreSection = () => {
                 <option>Kebutuhan Sehari-hari</option>
               </select>
 
-              <select 
+              <select
                 value={selectedSort}
                 onChange={(e) => setSelectedSort(e.target.value)}
                 className="py-3.5 px-5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#129991] focus:bg-white hover:border-gray-300 cursor-pointer min-w-[180px]"
@@ -513,7 +516,7 @@ const StoreSection = () => {
           animation-delay: 2s;
         }
         .animation-delay-4000 {
-          animation-delay: 4s;
+          animation-delay: 2s;
         }
       `}</style>
     </section>

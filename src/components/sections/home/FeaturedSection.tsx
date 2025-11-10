@@ -12,19 +12,22 @@ const products = [
   {
     id: 1,
     name: "Bakso Mas GP Special",
-    description: "Bakso urat segar dengan kuah kaldu sapi yang kaya rasa. Disajikan dengan mie kuning dan pangsit goreng",
+    description:
+      "Bakso urat segar dengan kuah kaldu sapi yang kaya rasa. Disajikan dengan mie kuning dan pangsit goreng",
     image: "/img-src/bakso-gp1.png",
   },
   {
     id: 2,
     name: "Es Kuwut Segar",
-    description: "Es serut dengan sirup pilihan dan topping lengkap. Cocok untuk cuaca panas di Depok",
+    description:
+      "Es serut dengan sirup pilihan dan topping lengkap. Cocok untuk cuaca panas di Depok",
     image: "/img-src/kuwut1.png",
   },
   {
     id: 3,
     name: "Kopi Susu Palas",
-    description: "Kopi susu premium dengan biji kopi pilihan. Diseduh dengan teknik manual brewing yang sempurna",
+    description:
+      "Kopi susu premium dengan biji kopi pilihan. Diseduh dengan teknik manual brewing yang sempurna",
     image: "/img-src/palaskopi2.png",
   },
 ];
@@ -47,45 +50,43 @@ export default function FeaturedSection() {
   return (
     <section className="py-24 bg-gradient-to-b from-white via-gray-50 to-white">
       <div className="container mx-auto px-6">
-        
         {/* Header Section */}
         <AnimatedWrapper>
           <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gray-900">Daftar </span>
-            <span className="bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] bg-clip-text text-transparent">
-              Toko UMKM Lokal
-            </span>
-          </h2>
-          <p className="text-gray-600 text-lg md:text-xl">
-            Temukan berbagai toko UMKM lokal terbaik di sekitarmu
-          </p>
-        </div>
-
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="text-gray-900">Daftar </span>
+              <span className="bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] bg-clip-text text-transparent">
+                Toko UMKM Lokal
+              </span>
+            </h2>
+            <p className="text-gray-600 text-lg md:text-xl">
+              Temukan berbagai toko UMKM lokal terbaik di sekitarmu
+            </p>
+          </div>
         </AnimatedWrapper>
 
         {/* Carousel Container */}
         <AnimatedWrapper delay={0.2}>
           <div className="relative max-w-6xl mx-auto">
-            
             {/* Main Carousel Card */}
-            <div className="bg-gradient-to-br from-[#0d5f59] to-[#129991] rounded-3xl overflow-hidden shadow-2xl">
-              <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
-                
+            <div className="bg-gradient-to-br from-[#0d5f59] to-[#129991] rounded-3xl overflow-hidden shadow-2xl h-[480px]">
+              <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12 h-full">
                 {/* Left Content */}
-                <div className="text-white space-y-6">
+                <div className="text-white space-y-6 h-full flex flex-col justify-center">
                   <h3 className="text-4xl md:text-5xl font-bold italic">
                     {products[currentIndex].name}
                   </h3>
-                  
-                  <p className="text-gray-100 text-lg leading-relaxed">
+
+                  <p className="text-gray-100 text-lg leading-relaxed flex-1">
                     {products[currentIndex].description}
                   </p>
-                  
+
                   <Link href="/detail-umkm">
-                    <button className="bg-[#15b8ad] hover:bg-[#18c7bb] text-white font-semibold 
+                    <button
+                      className="bg-[#15b8ad] hover:bg-[#18c7bb] text-white font-semibold 
                                      rounded-full py-3 px-8 transition-all duration-300
-                                     inline-flex items-center gap-2 group">
+                                     inline-flex items-center gap-2 group"
+                    >
                       Detail
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -93,13 +94,13 @@ export default function FeaturedSection() {
                 </div>
 
                 {/* Right Image */}
-                <div className="relative">
-                  <div className="relative w-full aspect-square max-w-md mx-auto">
+                <div className="relative h-full flex items-center">
+                  <div className="relative w-full h-[360px] max-w-md mx-auto">
                     {/* White Background Card */}
                     <div className="absolute inset-0 bg-white rounded-3xl shadow-xl transform rotate-3" />
-                    
+
                     {/* Image Container */}
-                    <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl border-8 border-white">
+                    <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl border-8 border-white h-full">
                       <Image
                         src={products[currentIndex].image}
                         alt={products[currentIndex].name}
