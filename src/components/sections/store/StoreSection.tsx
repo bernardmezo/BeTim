@@ -369,7 +369,7 @@ const StoreSection = () => {
   return (
     <section
       key={pathname}
-      className="py-20 -mt-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden"
+      className="py-40 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden"
     >
       {/* Animated Background Blobs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#129991]/8 rounded-full blur-[3rem] animate-blob" />
