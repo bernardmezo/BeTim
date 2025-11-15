@@ -1,7 +1,6 @@
 // src/app/page.tsx
 import HeroSection from "@/components/sections/home/HeroSection";
-// import CategorySection from '@/components/sections/home/CategorySection';
-import StoreSection from "@/components/sections/store/StoreSection";
+import CategorySection from '@/components/sections/home/CategorySection';
 import FeaturedSection from "@/components/sections/home/FeaturedSection";
 import FeaturedProducts from "@/components/sections/home/FeaturedProducts";
 import TestimonialSelection from "@/components/sections/home/TestimonialSelection";
@@ -11,8 +10,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      {/* <CategorySection /> */}
-      <StoreSection />
+      <CategorySection />
       <FeaturedSection />
       <FeaturedProducts />
       <TestimonialSelection />
