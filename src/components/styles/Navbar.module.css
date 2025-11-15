@@ -1,83 +1,100 @@
+/* src/components/layout/Navbar.module.css */
+
 /* Logo Styles */
 .logoContainer {
   position: relative;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
 .logoContainer:hover {
-  /* Grup hover effect */
+  transform: translateY(-2px);
 }
 
 .logoUnderline {
   position: absolute;
-  bottom: -0.25rem;
+  bottom: -0.5rem;
   left: 0;
   width: 0;
-  height: 0.125rem;
-  background: linear-gradient(to right, #129991, #15b8ad);
-  transition: width 0.3s ease;
+  height: 0.15rem;
+  background: linear-gradient(to right, #14b8a6, #10b981);
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(20, 184, 166, 0.4);
 }
 
 .logoContainer:hover .logoUnderline {
   width: 100%;
 }
 
-/* Navigation Links */
+/* Navigation Links - UPDATED TO MATCH HERO */
 .floatingIndicator {
   position: absolute;
-  height: 2.5rem;
-  background: linear-gradient(to right, rgba(18, 153, 145, 0.1), rgba(21, 184, 173, 0.1));
-  border-radius: 9999px;
-  transition: all 0.3s ease-out;
+  height: 2.75rem;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(16, 185, 129, 0.15));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 16px rgba(20, 184, 166, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .navLink {
   position: relative;
   z-index: 10;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  border-radius: 9999px;
-  transition: all 0.3s ease;
-  display: block;
-  color: rgb(75, 85, 99);
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgb(71, 85, 105);
   text-decoration: none;
   cursor: pointer;
+  letter-spacing: -0.01em;
 }
 
 .navLink:hover {
-  color: #129991;
+  color: #14b8a6;
+  transform: translateY(-1px);
+  text-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
 }
 
 .navLinkActive {
-  color: #129991;
-  font-weight: 600;
+  color: #14b8a6;
+  font-weight: 700;
 }
 
 .activeDot {
-  position: absolute;
-  bottom: -0.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0.375rem;
-  height: 0.375rem;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 9999px;
-  background-color: #129991;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: linear-gradient(135deg, #14b8a6, #10b981);
+  animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 
+    0 0 8px rgba(20, 184, 166, 0.6),
+    0 0 16px rgba(20, 184, 166, 0.3);
 }
 
 .shimmer {
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
+  border-radius: 12px;
   opacity: 0;
   background: linear-gradient(
-    to right,
-    transparent,
-    rgba(18, 153, 145, 0.05),
-    transparent
+    110deg,
+    transparent 25%,
+    rgba(20, 184, 166, 0.1) 50%,
+    transparent 75%
   );
-  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+  animation: shimmerMove 2.5s infinite;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
@@ -86,61 +103,85 @@
   opacity: 1;
 }
 
-/* Search Bar Styles */
+/* Search Bar Styles - UPDATED TO MATCH HERO */
 .searchContainer {
   position: relative;
 }
 
 .searchInput {
-  border: 1px solid rgb(209, 213, 219);
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
-  padding-left: 2.5rem;
-  width: 16rem;
-  transition: all 0.3s ease;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 0.625rem 1.125rem;
+  padding-left: 2.75rem;
+  width: 15rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
-  background-color: white;
-  color: rgb(17, 24, 39);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgb(30, 41, 59);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .searchInput::placeholder {
-  color: rgb(107, 114, 128);
+  color: rgb(148, 163, 184);
+  font-weight: 500;
 }
 
 .searchInput:focus {
-  border-color: #129991;
-  box-shadow: 0 0 0 2px rgba(18, 153, 145, 0.2);
+  border-color: rgba(20, 184, 166, 0.5);
+  box-shadow: 
+    0 0 0 3px rgba(20, 184, 166, 0.15),
+    0 4px 12px rgba(20, 184, 166, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   width: 20rem;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .searchContainer:hover .searchInput {
-  border-color: rgba(18, 153, 145, 0.5);
+  border-color: rgba(20, 184, 166, 0.3);
+  box-shadow: 
+    0 2px 8px rgba(20, 184, 166, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .searchIcon {
   position: absolute;
-  left: 0.75rem;
+  left: 0.875rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
-  color: rgb(156, 163, 175);
-  transition: color 0.3s ease;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: rgb(148, 163, 184);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
 .searchContainer:hover .searchIcon {
-  color: #129991;
+  color: #14b8a6;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.searchContainer:focus-within .searchIcon {
+  color: #14b8a6;
 }
 
 .searchGlow {
   position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background-color: rgba(18, 153, 145, 0.2);
-  filter: blur(1.5rem);
+  inset: -8px;
+  border-radius: 20px;
+  background: radial-gradient(
+    circle at center,
+    rgba(20, 184, 166, 0.25),
+    transparent 70%
+  );
+  filter: blur(20px);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -10;
   pointer-events: none;
 }
@@ -150,22 +191,33 @@
 }
 
 /* Animations */
-@keyframes shimmer {
+@keyframes shimmerMove {
   0% {
-    transform: translateX(-100%);
+    background-position: -200% 0;
   }
   100% {
-    transform: translateX(100%);
+    background-position: 200% 0;
   }
 }
 
-@keyframes pulse {
+@keyframes pulseGlow {
   0%, 100% {
     opacity: 1;
+    box-shadow: 
+      0 0 8px rgba(20, 184, 166, 0.6),
+      0 0 16px rgba(20, 184, 166, 0.3);
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
+    box-shadow: 
+      0 0 12px rgba(20, 184, 166, 0.8),
+      0 0 24px rgba(20, 184, 166, 0.4);
   }
+}
+
+/* Hover Effects untuk Active Link */
+.navLinkActive:hover {
+  text-shadow: 0 0 24px rgba(20, 184, 166, 0.5);
 }
 
 /* Mobile Responsive */
@@ -176,5 +228,10 @@
   
   .searchInput:focus {
     width: 100%;
+  }
+  
+  .navLink {
+    font-size: 0.9375rem;
+    padding: 0.75rem 1rem;
   }
 }
