@@ -95,4 +95,13 @@
   }
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
 /* Anda bisa menambahkan style kustom lainnya di @layer components atau @layer utilities di sini */

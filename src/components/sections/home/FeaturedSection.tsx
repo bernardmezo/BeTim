@@ -4,144 +4,222 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, MapPin, ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Store, Star } from "lucide-react";
 import AnimatedWrapper from "@/components/ui/AnimatedWrapper";
+import { useState, useEffect } from "react";
 
-const stores = [
+const products = [
   {
-    image: "/img-src/bakmi88-2.png",
-    category: "Heavy Food",
-    rating: 4.8,
-    name: "Bakmi Beji 88",
-    description: "Bakmi ayam dengan variasi topping seperti ayam kecap, bakso, pangsit...",
-    location: "123 Main Street, Downtown",
+    id: 1,
+    name: "Bakso Mas GP Special",
+    category: "Kuliner",
+    rating: "4.9",
+    description:
+      "Bakso urat segar dengan kuah kaldu sapi yang kaya rasa. Disajikan dengan mie kuning dan pangsit goreng yang renyah.",
+    image: "/img-src/bakso-gp1.png",
   },
   {
-    image: "/img-src/mendoan4.png",
-    category: "Heavy Food",
-    rating: 4.8,
-    name: "Tempe Mendoan Dan Pecel Sayur",
-    description: "Warung makan yang menyajikan aneka jajanan dan makanan tradisional...",
-    location: "123 Main Street, Downtown",
+    id: 2,
+    name: "Es Kuwut Segar",
+    category: "Minuman",
+    rating: "4.8",
+    description:
+      "Es serut dengan sirup pilihan, jeruk nipis, dan topping kelapa muda. Pilihan tepat untuk menyegarkan hari yang panas.",
+    image: "/img-src/kuwut1.png",
   },
   {
-    image: "/img-src/steam1.png",
-    category: "Service",
-    rating: 4.8,
-    name: "Satria Steam Motor & Helmet",
-    description: "Jasa cuci motor dan helm dengan pelayanan cepat serta hasil...",
-    location: "123 Main Street, Downtown",
+    id: 3,
+    name: "Kopi Susu Palas",
+    category: "Coffee Shop",
+    rating: "5.0",
+    description:
+      "Kopi susu gula aren premium dengan biji kopi pilihan Arabica. Diseduh dengan teknik manual brewing yang sempurna.",
+    image: "/img-src/palaskopi2.png",
   },
 ];
 
-// Store Card Component - Simple & Fast
-function StoreCard({ store }: { store: typeof stores[0] }) {
-  return (
-    <div className="group border border-gray-200/50 rounded-3xl shadow-lg overflow-hidden 
-                   bg-white hover:shadow-xl transition-shadow duration-300">
-      {/* Image Container */}
-      <div className="relative w-full h-56 bg-gray-100 overflow-hidden">
-        <Image
-          src={store.image}
-          alt={store.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        
-        {/* Category Badge */}
-        <span className="absolute top-4 left-4 bg-[#129991] text-white text-xs font-bold px-4 py-2 rounded-full">
-          {store.category}
-        </span>
-        
-        {/* Rating Badge */}
-        <span className="absolute top-4 right-4 bg-white text-gray-800 text-sm font-bold px-3 py-2 rounded-full flex items-center">
-          <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 mr-1" />
-          {store.rating}
-        </span>
-
-        {/* Store Name Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="text-xl font-bold">
-            {store.name}
-          </h3>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <p className="text-gray-600 text-sm mb-4 h-12 line-clamp-2">
-          {store.description}
-        </p>
-        
-        <div className="flex items-center text-gray-500 text-sm mb-6">
-          <MapPin className="w-4 h-4 mr-2 text-[#129991]" />
-          <span className="line-clamp-1">{store.location}</span>
-        </div>
-        
-        <Link href="#" className="block">
-          <button className="w-full bg-gradient-to-r from-[#129991] to-[#15b8ad]
-                           text-white font-semibold rounded-full py-3 px-6
-                           hover:opacity-90 transition-opacity duration-200
-                           flex items-center justify-center gap-2">
-            View Store
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export default function FeaturedSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const nextSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => (prev + 1) % products.length);
+  };
+
+  const prevSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => (prev - 1 + products.length) % products.length);
+  };
+
+  const goToSlide = (index: number) => {
+    if (index === currentIndex || isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex(index);
+  };
+
+  // Reset animation state after transition
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimating(false), 500);
+    return () => clearTimeout(timer);
+  }, [currentIndex]);
+
   return (
-    <section className="py-24 bg-gradient-to-b from-white via-gray-50 to-white">
-      <div className="container mx-auto px-6">
-        
-        {/* Header Section with Animation */}
+    <section className="relative py-24 overflow-hidden bg-slate-50">
+      
+      {/* 1. Ambient Background (Blobs) - Penting untuk efek Glassmorphism */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-teal-300/40 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-cyan-300/40 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-6">
+        {/* Header Section */}
         <AnimatedWrapper>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-gray-900">Featured </span>
-              <span className="bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] 
-                             bg-clip-text text-transparent">
-                Local Stores
+          <div className="text-center mb-16 space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider mb-2">
+                <Store className="w-3 h-3" />
+                Rekomendasi Pilihan
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+              Daftar{" "}
+              <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-transparent">
+                Toko UMKM Lokal
               </span>
             </h2>
-            <p className="text-gray-600 text-lg md:text-xl">
-              Discover the best stores in your community
+            <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto">
+              Temukan berbagai produk unggulan dari UMKM terbaik di sekitarmu yang telah terkurasi.
             </p>
           </div>
         </AnimatedWrapper>
 
-        {/* Store Cards Grid with Staggered Animation */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {stores.map((store, index) => (
-            <AnimatedWrapper key={index} delay={index * 0.1}>
-              <StoreCard store={store} />
-            </AnimatedWrapper>
-          ))}
-        </div>
+        {/* Carousel Container */}
+        <AnimatedWrapper delay={0.2}>
+          <div className="relative max-w-6xl mx-auto">
+            
+            {/* 2. Main Glass Card Container */}
+            <div className="relative bg-white/60 backdrop-blur-xl border border-white/60 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] transition-all duration-500">
+              
+              {/* Grid Content */}
+              <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12 h-full">
+                
+                {/* Left Content (Text) */}
+                <div className="space-y-8 flex flex-col justify-center order-2 md:order-1">
+                  
+                  {/* Content Transition Wrapper */}
+                  <div 
+                    key={currentIndex} 
+                    className="animate-fade-in-slide space-y-6"
+                  >
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className="px-3 py-1 rounded-lg bg-teal-100/50 text-teal-700 text-sm font-bold border border-teal-200">
+                                {products[currentIndex].category}
+                            </span>
+                            <div className="flex items-center gap-1 text-amber-500 font-bold text-sm">
+                                <Star className="w-4 h-4 fill-amber-500" />
+                                {products[currentIndex].rating}
+                            </div>
+                        </div>
 
-        {/* CTA Button with Animation */}
-        <AnimatedWrapper delay={0.4}>
-          <div className="text-center">
-            <Link href="/store-umkm">
-              <button className="bg-gradient-to-r from-[#129991] to-[#15b8ad]
-                               text-white font-bold text-lg
-                               rounded-full py-4 px-10
-                               hover:opacity-90 transition-opacity duration-200
-                               inline-flex items-center gap-3">
-                View All UMKM
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
+                        <h3 className="text-4xl md:text-5xl font-extrabold text-slate-800 leading-tight">
+                        {products[currentIndex].name}
+                        </h3>
+
+                        <p className="text-slate-600 text-lg leading-relaxed">
+                        {products[currentIndex].description}
+                        </p>
+                    </div>
+
+                    <Link href="/detail-umkm" className="inline-block">
+                        <button
+                        className="group relative overflow-hidden bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold 
+                                    rounded-xl py-4 px-10 transition-all duration-300 shadow-lg hover:shadow-teal-500/40 hover:scale-[1.02]"
+                        >
+                        <span className="relative z-10 flex items-center gap-2">
+                            Lihat Toko
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        </button>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Right Image - Floating Glass Effect */}
+                <div className="relative h-full flex items-center justify-center order-1 md:order-2">
+                  <div className="relative w-full max-w-md aspect-square">
+                    
+                    {/* Decorative Background Elements behind Image */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-br from-teal-200/20 to-cyan-200/20 rounded-full blur-3xl" />
+                    
+                    {/* 3. Image Glass Frame */}
+                    <div 
+                        key={currentIndex}
+                        className="relative w-full h-full p-4 bg-white/40 backdrop-blur-md border border-white/60 rounded-[2rem] shadow-xl animate-float-slow"
+                    >
+                        <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-slate-100">
+                            <Image
+                                src={products[currentIndex].image}
+                                alt={products[currentIndex].name}
+                                fill
+                                className="object-cover hover:scale-110 transition-transform duration-700"
+                                priority
+                            />
+                            
+                            {/* Inner Glass Gloss */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="flex justify-between items-center mt-10 px-4">
+                {/* Dots */}
+                <div className="flex gap-3 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/50 shadow-sm">
+                  {products.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToSlide(index)}
+                      className={`transition-all duration-500 rounded-full h-2.5 ${
+                        index === currentIndex
+                          ? "w-8 bg-gradient-to-r from-teal-500 to-cyan-500"
+                          : "w-2.5 bg-slate-300 hover:bg-teal-300"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Arrows */}
+                <div className="flex gap-4">
+                    <button
+                        onClick={prevSlide}
+                        className="group bg-white/60 backdrop-blur-md hover:bg-white border border-white/60 text-slate-600 hover:text-teal-600 rounded-2xl p-4 
+                                shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                    >
+                        <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                        onClick={nextSlide}
+                        className="group bg-white/60 backdrop-blur-md hover:bg-white border border-white/60 text-slate-600 hover:text-teal-600 rounded-2xl p-4 
+                                shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                    >
+                        <ChevronRight className="w-6 h-6" />
+                    </button>
+                </div>
+            </div>
+
           </div>
         </AnimatedWrapper>
       </div>
+
+<div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 via-slate-50/80 to-transparent pointer-events-none" />
     </section>
   );
 }

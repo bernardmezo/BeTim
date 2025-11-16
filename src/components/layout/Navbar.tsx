@@ -1,24 +1,23 @@
 // src/components/layout/Navbar.tsx
 "use client";
+
 import Link from 'next/link';
-import { Search, Menu, X } from 'lucide-react'; 
+import { Search, Menu, X, Store } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation'; 
+import { usePathname } from 'next/navigation';
 import styles from '../styles/Navbar.module.css';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/categories', label: 'Categories' },
-  { href: '/store-umkm', label: 'Store' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/', label: 'Beranda' },
+  { href: '/store-umkm', label: 'Toko' },
+  { href: '/about-betim', label: 'Tentang' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const pathname = usePathname();
   const isHomePage = pathname === '/';
@@ -41,10 +40,13 @@ export default function Navbar() {
     }
   };
   
+  // Handle scroll effect - ALWAYS VISIBLE, changes style on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (isHomePage) {
         setScrolled(window.scrollY > 50);
+      } else {
+        setScrolled(true); // Always scrolled state on non-home pages
       }
     };
     
@@ -52,6 +54,8 @@ export default function Navbar() {
       window.addEventListener('scroll', handleScroll);
       handleScroll();
       return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      setScrolled(true);
     }
   }, [isHomePage]);
   
@@ -69,42 +73,22 @@ export default function Navbar() {
   }, [pathname]);
   
   const isActive = scrolled || !isHomePage;
-  
-  const baseClasses = `
-    fixed top-0 left-0 right-0 z-50 
-    transition-all duration-500 ease-in-out
-  `;
-  
-  const notScrolledClasses = `
-    bg-transparent 
-    shadow-none
-    -translate-y-full
-    opacity-0
-    pointer-events-none
-  `;
-  
-  const scrolledClasses = `
-    bg-white/95 
-    shadow-lg
-    backdrop-blur-lg 
-    py-4
-    translate-y-0
-    opacity-100
-    pointer-events-auto
-  `;
-  
+
   return (
     <header 
       className={`
-        ${baseClasses} 
-        ${isActive ? scrolledClasses : notScrolledClasses}
+        fixed top-0 left-0 w-full z-50 
+        transition-all duration-500 ease-in-out
+        ${isActive 
+          ? 'bg-white/95 backdrop-blur-lg shadow-lg' 
+          : 'bg-transparent'
+        }
       `}
     >
-      <nav 
-        className="container mx-auto px-6 flex justify-between items-center"
-      >
-        {/* Logo */}
-        <div className={styles.logoContainer}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
+          {/* LOGO */}
+          <div className={styles.logoContainer}>
           <Link href="/"><svg width="128" height="42" viewBox="0 0 128 42" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M54.8 38.48C54.0533 38.48 53.2933 38.2533 52.52 37.8C51.7733 37.32 51.0667 36.6933 50.4 35.92C49.76 35.12 49.24 34.24 48.84 33.28C48.44 32.32 48.24 31.36 48.24 30.4C48.24 28.5067 48.5067 26.6267 49.04 24.76C49.6 22.8933 50.36 21.2 51.32 19.68C52.3067 18.16 53.4667 16.9467 54.8 16.04C56.1333 15.1333 57.5733 14.68 59.12 14.68C59.8133 14.68 60.5733 14.8933 61.4 15.32C62.2267 15.72 62.8267 16.32 63.2 17.12C64.2133 17.6 64.96 18.32 65.44 19.28C65.92 20.24 66.1067 21.12 66 21.92C65.92 22.56 65.64 23.2933 65.16 24.12C64.68 24.92 64.0667 25.7467 63.32 26.6C62.5733 27.4267 61.7467 28.2 60.84 28.92C59.9333 29.6133 59 30.1867 58.04 30.64C57.1067 31.0667 56.2 31.28 55.32 31.28C55 31.28 54.6533 31.1733 54.28 30.96C54.36 31.8133 54.6 32.4267 55 32.8C55.4267 33.1467 55.9867 33.32 56.68 33.32C57.6933 33.32 58.8133 32.96 60.04 32.24C61.2667 31.52 62.5733 30.56 63.96 29.36C64.5733 29.6533 65.04 30.04 65.36 30.52C65.68 30.9733 65.8 31.5467 65.72 32.24C65.6133 33.04 65.1867 33.8133 64.44 34.56C63.72 35.28 62.8 35.9467 61.68 36.56C60.5867 37.1467 59.4267 37.6133 58.2 37.96C57 38.3067 55.8667 38.48 54.8 38.48ZM60.76 19.08C59.72 19.1333 58.7733 19.6133 57.92 20.52C57.0667 21.4267 56.3467 22.5467 55.76 23.88C55.1733 25.1867 54.7467 26.4933 54.48 27.8C55.36 27.6133 56.1867 27.16 56.96 26.44C57.76 25.6933 58.4533 24.8533 59.04 23.92C59.6533 22.96 60.12 22.04 60.44 21.16C60.76 20.2533 60.8667 19.56 60.76 19.08ZM76.2731 38.56C75.6331 38.56 74.9398 38.3333 74.1931 37.88C73.4465 37.4267 72.8331 36.6533 72.3531 35.56C71.8731 34.4667 71.6865 32.9733 71.7931 31.08L72.6331 15.04C72.2065 15.0933 71.7798 15.1333 71.3531 15.16C70.9531 15.16 70.5665 15.16 70.1931 15.16C69.2065 15.16 68.2731 14.9067 67.3931 14.4C66.5398 13.8933 65.8465 13.28 65.3131 12.56C64.8065 11.84 64.5531 11.16 64.5531 10.52C64.5531 10.0667 64.8198 9.84 65.3531 9.84C65.6731 9.84 66.2731 9.8 67.1531 9.72C68.0331 9.64 69.0465 9.54667 70.1931 9.44C71.3665 9.33333 72.5398 9.22666 73.7131 9.12C74.9131 9.01333 75.9931 8.92 76.9531 8.84C77.9398 8.76 78.6598 8.72 79.1131 8.72C79.8865 8.72 80.6865 8.88 81.5131 9.2C82.3398 9.49333 83.0998 9.89333 83.7931 10.4C84.5131 10.88 85.0998 11.4267 85.5531 12.04C86.0065 12.6267 86.2331 13.2 86.2331 13.76C86.2331 14.0533 86.0865 14.2 85.7931 14.2C85.5265 14.2 85.2865 14.2 85.0731 14.2C84.8598 14.1733 84.6331 14.16 84.3931 14.16C83.4865 14.16 82.5665 14.1867 81.6331 14.24C80.6998 14.2933 79.7798 14.36 78.8731 14.44L77.5131 37.56C77.4865 37.9333 77.3798 38.1867 77.1931 38.32C77.0331 38.48 76.7265 38.56 76.2731 38.56ZM91.5894 38.56C90.896 38.56 90.1627 38.4267 89.3894 38.16C88.6427 37.8933 88.0027 37.5067 87.4694 37C86.9627 36.4933 86.7094 35.88 86.7094 35.16C86.7094 34.7333 86.736 33.9733 86.7894 32.88C86.8427 31.7867 86.9094 30.52 86.9894 29.08C87.0694 27.6133 87.1627 26.1067 87.2694 24.56C87.376 22.9867 87.496 21.4933 87.6294 20.08C87.7627 18.6667 87.8827 17.4667 87.9894 16.48C88.016 16.2667 88.1494 16.1333 88.3894 16.08C88.6294 16 88.8294 15.96 88.9894 15.96C89.6027 15.96 90.2827 16.1333 91.0294 16.48C91.776 16.8267 92.416 17.2667 92.9494 17.8C93.5094 18.3333 93.7894 18.8933 93.7894 19.48C93.7894 19.8267 93.736 20.52 93.6294 21.56C93.5227 22.5733 93.3894 23.7867 93.2294 25.2C93.096 26.6133 92.9494 28.0933 92.7894 29.64C92.656 31.1867 92.536 32.6933 92.4294 34.16C92.3227 35.6 92.2694 36.8533 92.2694 37.92C92.2694 38.0533 92.216 38.1867 92.1094 38.32C92.0027 38.48 91.8294 38.56 91.5894 38.56ZM92.1494 12C91.2694 12 90.456 11.9067 89.7094 11.72C88.9894 11.5067 88.416 11.1333 87.9894 10.6C87.5894 10.0667 87.416 9.30666 87.4694 8.32C87.5227 7.81333 87.5894 7.26666 87.6694 6.68C87.776 6.06666 88.1227 5.69333 88.7094 5.56C89.0294 5.50667 89.416 5.46667 89.8694 5.44C90.3227 5.41333 90.7227 5.4 91.0694 5.4C91.816 5.4 92.6427 5.52 93.5494 5.76C94.0027 5.86666 94.2294 6.04 94.2294 6.28C94.2294 6.89333 94.136 7.61333 93.9494 8.44C93.7627 9.26667 93.5627 10.4 93.3494 11.84C92.9227 11.9467 92.5227 12 92.1494 12ZM122.98 38.56C122.153 38.56 121.407 38.32 120.74 37.84C120.073 37.3333 119.54 36.68 119.14 35.88C118.74 35.08 118.54 34.24 118.54 33.36C118.54 32.56 118.593 31.6667 118.7 30.68C118.833 29.6933 118.993 28.7067 119.18 27.72C119.367 26.7333 119.567 25.8533 119.78 25.08L119.62 25C119.007 26.2267 118.353 27.6 117.66 29.12C116.993 30.64 116.38 32.2 115.82 33.8C115.26 35.4 114.807 36.9333 114.46 38.4C113.66 38.3733 112.887 38.32 112.14 38.24C111.42 38.16 110.873 37.8933 110.5 37.44C109.807 37.0933 109.3 36.56 108.98 35.84C108.66 35.12 108.46 34.2933 108.38 33.36C108.3 32.4267 108.26 31.4933 108.26 30.56C108.26 30.2133 108.287 29.7067 108.34 29.04C108.42 28.3733 108.513 27.6533 108.62 26.88C108.753 26.08 108.887 25.3333 109.02 24.64H108.9C107.78 26.8267 106.713 29.0667 105.7 31.36C104.713 33.6533 103.86 36 103.14 38.4C102.34 38.3733 101.687 38.24 101.18 38C100.673 37.76 100.18 37.4 99.7 36.92C98.9267 36.4933 98.38 35.9333 98.06 35.24C97.74 34.52 97.58 33.76 97.58 32.96C97.58 30.5067 97.7267 27.7867 98.02 24.8C98.34 21.8133 98.8333 18.76 99.5 15.64C99.6333 15.1067 99.8467 14.84 100.14 14.84C100.807 14.84 101.473 15 102.14 15.32C102.807 15.64 103.353 16.12 103.78 16.76C104.233 17.4 104.46 18.2 104.46 19.16C104.46 19.3467 104.447 19.56 104.42 19.8C104.393 20.0133 104.353 20.2267 104.3 20.44L102.7 27.96H102.78C103.82 25.6667 104.847 23.5467 105.86 21.6C106.9 19.6267 107.98 18.0133 109.1 16.76C109.34 16.4667 109.7 16.32 110.18 16.32C110.927 16.32 111.727 16.64 112.58 17.28C113.193 17.52 113.66 17.8533 113.98 18.28C114.327 18.68 114.5 19.1067 114.5 19.56C114.5 19.6133 114.5 19.68 114.5 19.76C114.5 19.84 114.487 19.9067 114.46 19.96C114.033 21.5067 113.687 23.16 113.42 24.92C113.153 26.68 113.007 28.3733 112.98 30L113.18 30.04C114.033 27.9867 114.913 26.0267 115.82 24.16C116.727 22.2667 117.927 20.36 119.42 18.44C119.633 18.2 119.953 18.08 120.38 18.08C121.153 18.08 121.993 18.4 122.9 19.04C123.513 19.2533 124.02 19.5467 124.42 19.92C124.82 20.2933 125.113 20.68 125.3 21.08C124.9 23.0267 124.567 25.2133 124.3 27.64C124.033 30.04 123.9 32.32 123.9 34.48C123.9 35.1733 123.913 35.84 123.94 36.48C123.993 37.12 124.047 37.7333 124.1 38.32C123.753 38.48 123.38 38.56 122.98 38.56Z" fill="#04343B"/>
           <path d="M8.74463 20.9043C9.31328 20.9307 9.88193 20.9571 10.4678 20.9843C10.4204 21.0371 10.373 21.0899 10.3242 21.1443C10.4664 21.174 10.6085 21.2037 10.755 21.2343C11.5931 21.435 12.399 21.7047 12.7654 22.1844C12.6706 22.1844 12.5758 22.1844 12.4782 22.1844C12.3893 22.1283 12.3005 22.0722 12.209 22.0144C11.5276 21.6154 10.426 21.3324 9.46262 21.2243C9.46262 21.1715 9.46262 21.1187 9.46262 21.0643C9.32046 21.1039 9.32046 21.1039 9.17543 21.1443C9.17543 21.1971 9.17543 21.2499 9.17543 21.3043C9.25576 21.3097 9.3361 21.3151 9.41887 21.3206C9.88304 21.41 10.1132 21.5669 10.4499 21.7644C10.9613 22.0586 11.4709 22.3308 12.0474 22.5844C12.0948 22.5316 12.1422 22.4788 12.191 22.4244C12.559 22.3744 12.559 22.3744 12.909 22.3444C12.909 22.5844 12.909 22.5844 12.7654 22.7444C12.955 22.7444 13.1445 22.7444 13.3398 22.7444C13.3398 22.6124 13.3398 22.4804 13.3398 22.3444C13.627 22.5044 13.627 22.5044 13.6449 22.7144C13.639 22.7771 13.6331 22.8398 13.627 22.9045C12.279 22.9611 11.0569 22.7215 10.0067 22.246C9.3248 21.8702 8.79492 21.4507 8.74463 20.9043Z" fill="#04343B"/>
@@ -118,144 +102,150 @@ export default function Navbar() {
           </Link>
           <div className={styles.logoUnderline} />
         </div>
-        
-        {/* Desktop Navigation */}
-        <ul className="hidden md:flex space-x-1 relative">
-          {/* Floating background indicator */}
-          <div 
-            className={styles.floatingIndicator}
-            style={{
-              left: `${indicatorStyle.left}px`,
-              width: `${indicatorStyle.width}px`,
-              opacity: hoveredIndex !== null || activeIndex !== -1 ? 1 : 0,
-            }}
-          />
-          
-          {navLinks.map((link, index) => {
-            const isCurrentPage = pathname === link.href;
+
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-1 relative">
+            {/* Floating background indicator */}
+            <div 
+              className={styles.floatingIndicator}
+              style={{
+                left: `${indicatorStyle.left}px`,
+                width: `${indicatorStyle.width}px`,
+                opacity: hoveredIndex !== null || activeIndex !== -1 ? 1 : 0,
+              }}
+            />
             
-            return (
-              <li 
-                key={link.href}
-                className="relative"
-                onMouseEnter={(e) => {
-                  setHoveredIndex(index);
-                  updateIndicator(e.currentTarget.querySelector('a'));
-                }}
-                onMouseLeave={() => {
-                  setHoveredIndex(null);
-                  const activeLink = document.querySelector(`[data-nav-index="${activeIndex}"]`) as HTMLElement;
-                  if (activeLink) {
-                    updateIndicator(activeLink);
-                  }
-                }}
-              >
-                <Link 
-                  href={link.href}
-                  data-nav-index={index}
-                  className={`
-                    ${styles.navLink}
-                    ${isCurrentPage ? styles.navLinkActive : ''}
-                  `}
+            {navLinks.map((link, index) => {
+              const isCurrentPage = pathname === link.href;
+              
+              return (
+                <div
+                  key={link.href}
+                  className="relative"
+                  onMouseEnter={(e) => {
+                    setHoveredIndex(index);
+                    updateIndicator(e.currentTarget.querySelector('a'));
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredIndex(null);
+                    const activeLink = document.querySelector(`[data-nav-index="${activeIndex}"]`) as HTMLElement;
+                    if (activeLink) {
+                      updateIndicator(activeLink);
+                    }
+                  }}
                 >
-                  {link.label}
-                  
-                  {isCurrentPage && (
-                    <span className={styles.activeDot} />
-                  )}
-                  
-                  <span className={styles.shimmer} />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-        
-        {/* Search Bar - Desktop */}
-        <div className={`${styles.searchContainer} hidden md:block`}>
-          <input
-            type="text"
-            placeholder="Search Product..."
-            className={styles.searchInput}
-          />
-          <Search className={styles.searchIcon} />
-          <div className={styles.searchGlow} />
+                  <Link
+                    href={link.href}
+                    data-nav-index={index}
+                    className={`
+                      ${styles.navLink}
+                      ${isCurrentPage ? styles.navLinkActive : ''}
+                    `}
+                  >
+                    {link.label}
+                    
+                    {isCurrentPage && (
+                      <span className={styles.activeDot} />
+                    )}
+                    
+                    <span className={styles.shimmer} />
+                  </Link>
+                </div>
+              );
+            })}
+          </nav>
+
+          {/* SEARCH BAR - DESKTOP */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className={styles.searchContainer}>
+              <input
+                type="text"
+                placeholder="Search Product..."
+                className={styles.searchInput}
+              />
+              <Search className={styles.searchIcon} />
+              <div className={styles.searchGlow} />
+            </div>
+          </div>
+
+          {/* MOBILE MENU BUTTON */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6 text-slate-700" />
+            ) : (
+              <Menu className="w-6 h-6 text-slate-700" />
+            )}
+          </button>
         </div>
+      </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? (
-            <X className="w-6 h-6 text-gray-800" />
-          ) : (
-            <Menu className="w-6 h-6 text-gray-800" />
-          )}
-        </button>
-      </nav>
-
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <div 
         className={`
           md:hidden
-          fixed top-[72px] left-0 right-0 
-          bg-white/95 backdrop-blur-lg
-          shadow-lg
+          bg-white border-t border-slate-200 shadow-xl
           transition-all duration-300 ease-in-out
           ${mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}
         `}
       >
-        <div className="container mx-auto px-6 py-4">
+        <div className="px-6 py-4 space-y-2">
           {/* Mobile Navigation Links */}
-          <ul className="space-y-2 mb-4">
-            {navLinks.map((link) => {
-              const isCurrentPage = pathname === link.href;
-              
-              return (
-                <li key={link.href}>
-                  <Link 
-                    href={link.href}
-                    className={`
-                      block px-4 py-3 rounded-lg
-                      transition-all duration-200
-                      ${isCurrentPage 
-                        ? 'bg-gradient-to-r from-[#129991]/10 to-[#15b8ad]/10 text-[#129991] font-semibold' 
-                        : 'text-gray-700 hover:bg-gray-100'
-                      }
-                    `}
-                  >
-                    <span className="flex items-center justify-between">
-                      {link.label}
-                      {isCurrentPage && (
-                        <span className="w-2 h-2 bg-[#129991] rounded-full" />
-                      )}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
+          {navLinks.map((link) => {
+            const isCurrentPage = pathname === link.href;
+            
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`
+                  block px-4 py-3 rounded-lg
+                  transition-all duration-200 font-semibold
+                  ${isCurrentPage 
+                    ? 'bg-gradient-to-r from-teal-50 to-emerald-50 text-teal-600' 
+                    : 'text-slate-700 hover:bg-slate-50 hover:text-teal-600'
+                  }
+                `}
+              >
+                <span className="flex items-center justify-between">
+                  {link.label}
+                  {isCurrentPage && (
+                    <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse" />
+                  )}
+                </span>
+              </Link>
+            );
+          })}
+          
           {/* Mobile Search Bar */}
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search Product..."
-              className="
-                w-full
-                border border-gray-300
-                rounded-full
-                py-3 px-4 pl-12
-                outline-none
-                transition-all duration-200
-                focus:border-[#129991]
-                focus:ring-2
-                focus:ring-[#129991]/20
-              "
-            />
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="pt-4 border-t border-slate-200">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search Product..."
+                className="
+                  w-full pl-12 pr-4 py-3
+                  bg-slate-50
+                  border border-slate-200
+                  rounded-xl
+                  text-sm font-medium
+                  outline-none
+                  transition-all duration-200
+                  focus:border-teal-500
+                  focus:ring-2
+                  focus:ring-teal-500/20
+                  focus:bg-white
+                "
+              />
+            </div>
+          </div>
+          
+          {/* Mobile CTA Button */}
+          <div className="pt-2">
           </div>
         </div>
       </div>

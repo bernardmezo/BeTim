@@ -1,22 +1,34 @@
-// src/components/sections/home/StoreSection.tsx
+// src/components/sections/stores/StoreSection.tsx
 "use client";
 
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
-import { Search, MapPin, Star, Clock, Phone, Heart, Sparkles } from "lucide-react";
-import { usePathname } from "next/navigation";
+import React, { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  MapPin,
+  Star,
+  Clock,
+  Phone,
+  Heart,
+  Sparkles,
+  Filter,
+  TrendingUp,
+  Store,
+  ChevronDown,
+} from "lucide-react";
+import Link from "next/link";
 
-const stores = [
+const allStores = [
   {
     id: 1,
     name: "Warung Bakso Tonjok Mas GP",
     rating: 4.8,
     reviews: 124,
     img: "/img-src/bakso-gp1.png",
-    desc: "Restoran usaha kuliner (UMKM) berupa warung bakso yang populer dengan sajian bakso urat...",
+    desc: "Restoran usaha kuliner (UMKM) berupa warung bakso yang populer dengan sajian bakso urat",
     address: "123 Main Street, Downtown",
-    category: "Heavy Food",
+    category: "makanan",
     hours: "10:00 - 21:00",
     featured: true,
   },
@@ -25,44 +37,41 @@ const stores = [
     name: "Satria Steam Motor & Helmet",
     rating: 4.8,
     reviews: 89,
-    img: "/img-src/store2.jpg",
-    desc: "Restoran mie & bakmi dengan variasi topping seperti ayam kecap, bakso, pangsit.",
+    img: "/img-src/steam1.png",
+    desc: "Restoran mie & bakmi dengan variasi topping seperti ayam kecap, bakso, pangsit",
     address: "123 Main Street, Downtown",
-    category: "Coffee & Tea",
+    category: "jasa",
     hours: "09:00 - 18:00",
-    featured: false,
   },
   {
     id: 3,
     name: "Warung Ibu Rum",
     rating: 4.8,
     reviews: 156,
-    img: "/img-src/store3.jpg",
-    desc: "Sebuah Usaha Mikro penjagadis (warung tenda/kaki lima) di Beji Timur yang spesialis menyajikan...",
+    img: "/img-src/nasiuduk3.png",
+    desc: "Sebuah Usaha Mikro penjagadis (warung tenda/kaki lima) di Beji Timur yang spesialis menyajikan",
     address: "123 Main Street, Downtown",
-    category: "Drinks",
-    hours: "17:00 - 23:00 atau hingga habis",
-    featured: false,
+    category: "minuman",
+    hours: "17:00 - 23:00",
   },
   {
     id: 4,
     name: "Pondor Steak & Stake",
     rating: 4.9,
     reviews: 203,
-    img: "/img-src/store2.jpg",
-    desc: "Steak house dengan cita rasa western dan harga terjangkau.",
+    img: "/img-src/steak1.png",
+    desc: "Steak house dengan cita rasa western dan harga terjangkau",
     address: "123 Main Street, Downtown",
-    category: "Heavy Food",
+    category: "makanan",
     hours: "11:00 - 22:00",
-    featured: false,
   },
   {
     id: 5,
-    name: "Apotek Jaya",
+    name: "Warung si Nopal",
     rating: 4.7,
     reviews: 67,
-    img: "/img-src/store3.jpg",
-    desc: "Apotek lengkap dengan obat-obatan dan konsultasi gratis.",
+    img: "/img-src/toko-nopal1.png",
+    desc: "Apotek lengkap dengan obat-obatan dan konsultasi gratis",
     address: "123 Main Street, Downtown",
     category: "Kebutuhan Sehari-hari",
     hours: "08:00 - 20:00",
@@ -70,196 +79,194 @@ const stores = [
   },
   {
     id: 6,
-    name: "Es Kuwwed Ice Shop",
+    name: "Es Kuwut",
     rating: 4.8,
     reviews: 178,
-    img: "/img-src/bakso-gp1.png",
-    desc: "Es serut dengan berbagai varian rasa dan topping.",
+    img: "/img-src/kuwut1.png",
+    desc: "Es serut dengan berbagai varian rasa dan topping",
     address: "123 Main Street, Downtown",
-    category: "Drinks",
+    category: "minuman",
     hours: "13:00 - 21:00",
-    featured: false,
+  },
+  {
+    id: 7,
+    name: "Bakmi88 Beji",
+    rating: 4.6,
+    reviews: 94,
+    img: "/img-src/bakmi88-2.png",
+    desc: "Restoran mie & bakmi dengan variasi topping seperti ayam kecap, bakso, pangsit",
+    address: "Jl. Ridwan Rais, Beji Timur",
+    category: "makanan",
+    hours: "10:00 - 21:00",
+  },
+  {
+    id: 8,
+    name: "Kost Pondok Ismata Putri",
+    rating: 4.6,
+    reviews: 45,
+    img: "/img-src/kos1.jpg",
+    desc: "Usaha UMKM di bidang jasa akomodasi (indekos) khusus Putri di area Beji",
+    address: "Beji, Kota Depok",
+    category: "jasa",
+    hours: "24 Hours",
+  },
+  {
+    id: 9,
+    name: "Tempe Mendoan Dan Pecel Sayur",
+    rating: 4.6,
+    reviews: 78,
+    img: "/img-src/mendoan1.png",
+    desc: "Usaha kuliner yang menjual aneka jajanan dan makanan tradisional Indonesia",
+    address: "Jalan Ridwan Rais Rt 01/02 Beji Timur",
+    category: "makanan",
+    hours: "07:00 - 21:00",
+  },
+  {
+    id: 10,
+    name: "Mosstly Coffee",
+    rating: 4.8,
+    reviews: 112,
+    img: "/img-src/mostly1.png",
+    desc: "Kafe modern, coffee shop populer di Beji. Hidden gem dengan suasana adem",
+    address: "Jl. Taufiqurrahman No.57A, Beji Timur",
+    category: "kopi & teh",
+    hours: "09:00 - 22:00",
+    featured: true,
+  },
+  {
+    id: 11,
+    name: "Palas Kopi",
+    rating: 4.6,
+    reviews: 112,
+    img: "/img-src/palaskopi2.png",
+    desc: "Coffee shop modern dengan area outdoor yang asri, tempat nongkrong nyaman",
+    address: "Jl. Pala No.2, Beji Tim.",
+    category: "kopi & teh",
+    hours: "11:00 - 22:00",
+    featured: true,
+  },
+  {
+    id: 12,
+    name: "Seblak Kabita Beji",
+    rating: 5.0,
+    reviews: 112,
+    img: "/img-src/pancong1.png",
+    desc: "Usaha kuliner populer di kalangan mahasiswa, spesialis seblak dan kue pancong",
+    address: "Jl. Kedasian, Beji Tim.",
+    category: "kopi & teh",
+    hours: "11:00 - 22:00",
+    featured: true,
   },
 ];
 
-// Category styles using Tailwind
 const getCategoryClasses = (category: string) => {
-  switch(category) {
-    case 'Heavy Food':
-      return "bg-gradient-to-br from-[#129991]/95 to-[#0d7269]/95";
-    case 'Coffee & Tea':
-      return "bg-gradient-to-br from-[#15b8ad]/95 to-[#129991]/95";
-    case 'Drinks':
-      return "bg-gradient-to-br from-[#0d7269]/95 to-[#0a5850]/95";
-    case 'Kebutuhan Sehari-hari':
-      return "bg-gradient-to-br from-[#129991]/95 to-[#15b8ad]/95";
+  switch (category) {
+    case "makanan":
+      return "from-teal-600 to-emerald-600";
+    case "kopi & teh":
+      return "from-cyan-600 to-teal-600";
+    case "minuman":
+      return "from-emerald-600 to-cyan-600";
+    case "Kebutuhan Sehari-hari":
+      return "from-teal-500 to-emerald-500";
+    case "jasa":
+      return "from-cyan-500 to-teal-500";
     default:
-      return "bg-gradient-to-br from-gray-600/95 to-gray-700/95";
+      return "from-slate-600 to-slate-700";
   }
 };
 
-// 3D Tilt Card Component
-function StoreCard({ store, index }: { store: typeof stores[0], index: number }) {
-  const [isHovered, setIsHovered] = useState(false);
+function StoreCard({ store, index }: { store: typeof allStores[0]; index: number }) {
   const [isLiked, setIsLiked] = useState(false);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-  
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
-  
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-  
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setIsHovered(false);
-  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1, type: "spring" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative"
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      whileHover={{ y: -8 }}
+      className="group h-full"
     >
-      {/* Glow effect background */}
-      <div className={`absolute -inset-1 bg-gradient-to-br from-[#129991] to-[#15b8ad] rounded-2xl blur-xl transition-opacity duration-500 ${isHovered ? 'opacity-40' : 'opacity-0'}`} />
-      
-      <div className="relative h-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-        {/* Store Image Container */}
-        <div className="relative w-full h-56 overflow-hidden">
-          <motion.div
-            animate={{ scale: isHovered ? 1.1 : 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full h-full"
-          >
-            <Image
-              src={store.img}
-              alt={store.name}
-              fill
-              className="object-cover"
-            />
-          </motion.div>
-          
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-          
-          {/* Featured Badge */}
+      <div className="relative h-full bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg hover:shadow-2xl overflow-hidden transition-all duration-300">
+        {/* Image */}
+        <div className="relative w-full h-52 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-200/20 to-cyan-200/20 blur-xl" />
+          <Image
+            src={store.img}
+            alt={store.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+
+          {/* Featured */}
           {store.featured && (
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className="absolute top-3 left-3 bg-gradient-to-br from-[#129991] to-[#15b8ad] text-white px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-[#129991]/40"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Featured</span>
-            </motion.div>
+            <div className="absolute top-3 left-3 bg-white/40 backdrop-blur-md border border-white/60 text-teal-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3" />
+              Featured
+            </div>
           )}
-          
-          {/* Category Badge */}
-          <div className={`absolute bottom-3 left-3 px-4 py-2 rounded-full text-sm font-semibold text-white backdrop-blur-md shadow-md ${getCategoryClasses(store.category)}`}>
+
+          {/* Category */}
+          <div className={`absolute bottom-3 left-3 px-4 py-2 rounded-xl text-sm font-bold text-white bg-gradient-to-r ${getCategoryClasses(store.category)}`}>
             {store.category}
           </div>
 
-          {/* Rating Badge */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="absolute top-3 right-3 bg-white/95 backdrop-blur-xl rounded-xl px-3 py-2.5 shadow-2xl"
-          >
-            <div className="flex items-center gap-2">
-              <Star className="w-4.5 h-4.5 fill-yellow-400 text-yellow-400" />
-              <div className="flex flex-col">
-                <span className="font-bold text-sm text-gray-900 leading-none">{store.rating}</span>
-                <span className="text-xs text-gray-600">({store.reviews})</span>
-              </div>
-            </div>
-          </motion.div>
-          
-          {/* Like Button */}
-          <motion.button
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsLiked(!isLiked)}
-            className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xl p-2.5 rounded-full shadow-md"
-          >
-            <Heart
-              className={`w-5 h-5 transition-all duration-300 ${
-                isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'
-              }`}
-            />
-          </motion.button>
-        </div>
-
-        {/* Store Info */}
-        <div className="p-5 relative" style={{ transform: 'translateZ(20px)' }}>
-          <h3 className={`text-xl font-bold text-gray-900 mb-2 overflow-hidden text-ellipsis whitespace-nowrap transition-colors duration-300 ${
-            isHovered ? 'text-[#129991]' : ''
-          }`}>
-            {store.name}
-          </h3>
-
-          <p className="text-sm text-gray-600 mb-4 min-h-10 leading-6 line-clamp-2">
-            {store.desc}
-          </p>
-
-          {/* Info with icons */}
-          <div className="flex flex-col gap-2 mb-5">
-            <div className="flex items-center gap-2 text-sm text-gray-600 group">
-              <MapPin className="w-4 h-4 text-[#129991] flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap">{store.address}</span>
-            </div>
-            
-            <div className="flex items-center gap-2 text-sm text-gray-600 group">
-              <Clock className="w-4 h-4 text-[#129991] flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap">{store.hours}</span>
+          {/* Rating */}
+          <div className="absolute top-3 right-3 bg-amber-50/80 backdrop-blur-md border border-amber-100/60 rounded-xl px-3 py-2 shadow-lg shadow-amber-100/50">
+            <div className="flex items-center gap-1.5">
+              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <span className="font-bold text-sm text-slate-800">{store.rating}</span>
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Like */}
+          <button
+            onClick={() => setIsLiked(!isLiked)}
+            className="absolute bottom-3 right-3 bg-white/80 backdrop-blur-md p-2 rounded-xl"
+          >
+            <Heart className={`w-5 h-5 transition-colors ${isLiked ? "fill-red-500 text-red-500" : "text-slate-600"}`} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-5">
+          <h3 className="text-lg font-bold text-slate-900 mb-2 line-clamp-1 group-hover:text-teal-600 transition-colors">
+            {store.name}
+          </h3>
+
+          <p className="text-sm text-slate-600 mb-4 line-clamp-2 min-h-[2.5rem]">
+            {store.desc}
+          </p>
+
+          {/* Info */}
+          <div className="flex flex-col gap-2 mb-4">
+            <div className="flex items-center gap-2 text-xs text-slate-600">
+              <div className="p-1.5 bg-teal-50 rounded-lg">
+                <MapPin className="w-3 h-3 text-teal-600" />
+              </div>
+              <span className="line-clamp-1">{store.address}</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-slate-600">
+              <div className="p-1.5 bg-cyan-50 rounded-lg">
+                <Clock className="w-3 h-3 text-cyan-600" />
+              </div>
+              <span>{store.hours}</span>
+            </div>
+          </div>
+
+          {/* Buttons */}
           <div className="flex gap-3">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex-1 relative overflow-hidden rounded-xl group"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-[#129991] to-[#15b8ad]" />
-              <span className="absolute inset-0 bg-gradient-to-r from-[#15b8ad] to-[#18c7bb] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative z-10 block py-3 text-white font-semibold text-sm">
-                View Store
-              </span>
-            </motion.button>
-            
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: 10 }}
-              whileTap={{ scale: 0.9 }}
-              className="w-12 h-12 border-2 border-[#129991] text-[#129991] rounded-xl flex items-center justify-center transition-all duration-300 hover:bg-[#129991] hover:text-white hover:shadow-md hover:shadow-[#129991]/30"
-            >
-              <Phone className="w-5 h-5" />
-            </motion.button>
+            <Link href="/detail-umkm" className="flex-1">
+              <button className="w-full py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-sm rounded-xl transition-all">
+                Lihat Detail
+              </button>
+            </Link>
+
+            <button className="w-12 h-12 bg-white/60 backdrop-blur-md border-2 border-teal-500/50 text-teal-600 rounded-xl hover:bg-teal-600 hover:text-white transition-all">
+              <Phone className="w-4 h-4 mx-auto" />
+            </button>
           </div>
         </div>
       </div>
@@ -267,133 +274,175 @@ function StoreCard({ store, index }: { store: typeof stores[0], index: number })
   );
 }
 
-const StoreSection = () => {
+export default function StoreSection() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [sort, setSort] = useState("rating-high");
   const [isFocused, setIsFocused] = useState(false);
-  const pathname = usePathname();
+
+  const filteredStores = useMemo(() => {
+    let filtered = [...allStores];
+
+    if (searchQuery.trim()) {
+      filtered = filtered.filter((s) =>
+        s.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (category !== "all") {
+      filtered = filtered.filter(
+        (s) => s.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+
+    if (sort === "rating-high") filtered.sort((a, b) => b.rating - a.rating);
+    else if (sort === "rating-low") filtered.sort((a, b) => a.rating - b.rating);
+    else if (sort === "newest") filtered.sort((a, b) => b.id - a.id);
+
+    return filtered;
+  }, [searchQuery, category, sort]);
 
   return (
-    <section key={pathname} className="py-20 mt-8 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
-      {/* Animated Background Blobs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#129991]/8 rounded-full blur-[3rem] animate-blob" />
-      <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-[#15b8ad]/8 rounded-full blur-[3rem] animate-blob animation-delay-2000" />
-      <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-[#18c7bb]/8 rounded-full blur-[3rem] animate-blob animation-delay-4000" />
-      
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
-            Local Stores
-          </h2>
-          <p className="text-lg text-gray-600">
-            Discover amazing stores in your community
-          </p>
-        </motion.div>
+    <main className="min-h-screen bg-slate-50">
+      <section className="relative py-30 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-teal-300/40 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-cyan-300/40 rounded-full blur-[120px]" />
+        </div>
 
-        {/* Search Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-10"
-        >
-          <div className="bg-white rounded-2xl shadow-2xl p-6 border border-gray-100">
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/* Search Input */}
-              <div className="flex-1 relative">
-                <div className={`absolute inset-0 bg-gradient-to-r from-[#129991] to-[#15b8ad] rounded-xl blur-xl transition-opacity duration-300 ${
-                  isFocused ? 'opacity-20' : 'opacity-0'
-                }`} />
-                <div className="relative">
-                  <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    isFocused ? 'text-[#129991]' : 'text-gray-400'
-                  }`} />
+        <div className="container relative z-10 mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider mb-3">
+              <Store className="w-3 h-3" />
+              Direktori Lengkap
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-3">
+              Semua{" "}
+              <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-emerald-600 bg-clip-text text-transparent">
+                Toko UMKM
+              </span>
+            </h1>
+
+            <p className="text-slate-600 text-base md:text-lg">
+              Temukan {allStores.length} UMKM lokal terbaik di sekitarmu
+            </p>
+          </motion.div>
+
+          {/* Search + Filter */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-10 max-w-5xl mx-auto"
+          >
+            <div className="bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl p-4 md:p-6">
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Search */}
+                <div className="flex-1 relative">
+                  <Search
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${
+                      isFocused ? "text-teal-600" : "text-slate-400"
+                    }`}
+                  />
                   <input
                     type="text"
-                    placeholder="Search Store..."
+                    placeholder="Cari nama toko..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
-                    className="w-full py-3.5 pl-12 pr-4 text-gray-500 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#129991] focus:bg-white"
+                    className="w-full py-3.5 lg:py-4 pl-12 pr-4 bg-white/70 border-2 border-white/60 rounded-2xl outline-none text-slate-700 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white transition-all"
                   />
+                </div>
+
+                {/* Category */}
+                <div className="relative group">
+                  <Filter className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none z-10 transition-colors" />
+
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="appearance-none w-full lg:min-w-[200px] py-3.5 lg:py-4 pl-12 pr-10 bg-white/70 border-2 border-white/60 rounded-2xl outline-none text-slate-700 focus:border-cyan-500 focus:bg-white transition-all cursor-pointer"
+                  >
+                    <option value="all">Semua Kategori</option>
+                    <option value="makanan">Makanan</option>
+                    <option value="minuman">Minuman</option>
+                    <option value="kopi & teh">Kopi & Teh</option>
+                    <option value="jasa">Jasa</option>
+                    <option value="Kebutuhan Sehari-hari">Kebutuhan Sehari-hari</option>
+                  </select>
+
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none z-10" />
+                </div>
+
+                {/* Sort */}
+                <div className="relative group">
+                  <TrendingUp className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none z-10" />
+
+                  <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                    className="appearance-none w-full lg:min-w-[180px] py-3.5 lg:py-4 pl-12 pr-10 bg-white/70 border-2 border-white/60 rounded-2xl outline-none text-slate-700 focus:border-emerald-500 focus:bg-white transition-all cursor-pointer"
+                  >
+                    <option value="rating-high">Rating Tertinggi</option>
+                    <option value="rating-low">Rating Terendah</option>
+                    <option value="newest">Terbaru</option>
+                  </select>
+
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none z-10" />
                 </div>
               </div>
 
-              {/* Dropdowns */}
-              <select className="py-3.5 px-5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#129991] focus:bg-white hover:border-gray-300 cursor-pointer min-w-[180px]">
-                <option>All Category</option>
-                <option>Heavy Food</option>
-                <option>Coffee & Tea</option>
-                <option>Drinks</option>
-                <option>Kebutuhan Sehari-hari</option>
-              </select>
-
-              <select className="py-3.5 px-5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#129991] focus:bg-white hover:border-gray-300 cursor-pointer min-w-[180px]">
-                <option>Sort By Rating</option>
-                <option>Highest Rating</option>
-                <option>Lowest Rating</option>
-                <option>Newest</option>
-              </select>
+              <div className="mt-4 pt-4 border-t border-white/40">
+                <p className="text-slate-600 text-sm">
+                  Menampilkan{" "}
+                  <span className="font-bold text-teal-600">
+                    {filteredStores.length}
+                  </span>{" "}
+                  dari {allStores.length} toko
+                </p>
+              </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Animated Divider */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-full h-1 bg-gradient-to-r from-[#129991] via-[#15b8ad] to-[#18c7bb] rounded-full my-6 shadow-md shadow-[#129991]/30"
-          />
-
-          {/* Results Count */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-gray-600"
-          >
-            Showing <span className="font-bold text-[#129991]">{stores.length} of {stores.length}</span> stores
-          </motion.p>
-        </motion.div>
-
-        {/* Store Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" style={{ perspective: '1000px' }}>
-          {stores.map((store, index) => (
-            <StoreCard key={store.id} store={store} index={index} />
-          ))}
+          {/* Grid */}
+          <AnimatePresence mode="wait">
+            {filteredStores.length > 0 ? (
+              <motion.div
+                key="grid"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              >
+                {filteredStores.map((store, i) => (
+                  <StoreCard key={store.id} store={store} index={i} />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="bg-white/60 backdrop-blur-xl border border-white/60 rounded-3xl p-16 text-center"
+              >
+                <Search className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-slate-400 mb-2">
+                  Tidak ada toko ditemukan
+                </h3>
+                <p className="text-slate-500">
+                  Coba ubah kata kunci atau filter pencarian
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
-
-      <style jsx>{`
-        @keyframes blob {
-          0%, 100% { 
-            transform: translate(0, 0) scale(1); 
-          }
-          33% { 
-            transform: translate(30px, -50px) scale(1.1); 
-          }
-          66% { 
-            transform: translate(-20px, 20px) scale(0.9); 
-          }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
-    </section>
+      </section>
+    </main>
   );
-};
-
-export default StoreSection;
+}
